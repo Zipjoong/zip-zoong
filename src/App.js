@@ -5,6 +5,7 @@ import "@tensorflow/tfjs-backend-webgl";
 import "@mediapipe/face_mesh";
 import Webcam from "react-webcam";
 import { runDetector } from "./utils/detector";
+import {Outlet} from "react-router-dom";
 
 const inputResolution = {
   width: 1080,
@@ -31,23 +32,25 @@ function App() {
   };
 
   return (
-    <div>
+    <><div>
       <Webcam
         width={inputResolution.width}
         height={inputResolution.height}
         style={{ visibility: "hidden", position: "absolute" }} // webcam을 보고싶으면 hidden -> visible로 변경
         videoConstraints={videoConstraints}
         onLoadedData={handleVideoLoad}
-        mirrored={true}
-      />
+        mirrored={true} />
       <canvas
         ref={canvasRef}
         width={inputResolution.width}
         height={inputResolution.height}
-        style={{ position: "absolute" }}
-      />
+        style={{ position: "absolute" }} />
       {loaded ? <></> : <header>Loading...</header>}
-    </div>
+    </div><div>
+        <Outlet />
+      </div></>
+    
+  
   );
 }
 

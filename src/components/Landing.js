@@ -1,0 +1,66 @@
+
+import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react';
+import { Box,Grid,Heading,Text,Button,Center} from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
+
+
+export default function Landing() {
+
+    return(
+        // <Center>
+           <Box >
+            <Grid mt={10} px={40} columnGap={10} templateColumns={"repeat(3,1fr)"}>
+            <Card align='center' variant={'filled'} padding={10} shadow={'dark-lg'}>
+                <CardHeader>
+                <Heading size='lg'> Check Your Study Time </Heading>
+                </CardHeader>
+                <CardBody>
+                <Text>FaceMesh를 사용하여 보다 정확한 집중시간을 측정해보세요!</Text>
+                </CardBody>
+                <CardFooter>
+                    <Link to="/stop">
+                        <Button align='center' shadow={'xl'} colorScheme='green'>Start</Button>
+                    
+                    </Link>
+                </CardFooter>
+            </Card>
+            <Card align='center' variant={'filled'} padding={10} shadow={'dark-lg'}>
+                <CardHeader>
+                <Heading size='lg'> CamStudy</Heading>
+                </CardHeader>
+                <CardBody>
+                <Text>다른 사용자들과 함께 공부해보는건 어떨까요?</Text>
+                </CardBody>
+                <CardFooter align='center'>
+                    <Link to="/face">
+                        <Button align='center' shadow={'xl'} colorScheme='green'>Start</Button>
+                    
+                    </Link>
+                
+                </CardFooter>
+            </Card>
+            <Card align='center' variant={'filled'} padding={10} shadow={'dark-lg'}>
+                <CardHeader>
+                <Heading size='lg'> Dashboard</Heading>
+                </CardHeader>
+                <CardBody>
+                <Text>TBD</Text>
+                </CardBody>
+                <CardFooter>
+                <Button shadow={'xl'} colorScheme='green'>View here</Button>
+                </CardFooter>
+            </Card>
+        </Grid>
+
+        </Box>
+            
+
+
+        // </Center>
+
+        
+    );
+}
+
+
+
