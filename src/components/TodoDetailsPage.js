@@ -1,19 +1,38 @@
-import { useParams } from "react-router-dom";
-import { Box, Text } from "@chakra-ui/react";
-
+import React from "react";
+import { useParams , useLocation} from "react-router-dom";
+import { Box, Center, Text, VStack } from "@chakra-ui/react";
+import FaceMeshPage from "./FaceMeshPage";
+import Stopwatch from "./Stopwatch";
 
 function TodoDetailsPage() {
   const { Uid } = useParams();
+  const { state } = useLocation();
+  const title = state && state.title;
 
-  // todos 배열에서 id에 해당하는 Todo 항목을 찾는 로직 구현
-  // const todo = todos.find((todo) => todo.id === parseInt(id));
+
+
+  
 
   return (
-    <Box p={4}>
-      <Text>{Uid} nell</Text>
-      <Text>WWWWWWWWWWWWWWWWW</Text>
-      {/* <Text>{todo ? todo.title : "Todo not found"}</Text> */}
-    </Box>
+    <VStack >
+      <Box p={4}>
+      {/* <Text>{Uid} nell</Text> */}
+      <Center>
+      <Text as={'b'} color={'green.700'} fontSize={"3xl"}>{title}</Text>
+      </Center>
+        
+        <Box>
+          <Stopwatch />
+        </Box>
+      <Box my={5} bg="green.200" padding={20} overflow="hidden" rounded="xl" shadow="dark-lg">
+        {/* <FaceMeshPage /> */}
+      </Box>
+      </Box>
+
+
+    </VStack>
+    
   );
 }
+
 export default TodoDetailsPage;

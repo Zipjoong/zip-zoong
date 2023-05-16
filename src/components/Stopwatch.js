@@ -1,5 +1,6 @@
-import { Button,Text} from '@chakra-ui/react';
+import { Button,Text, VStack} from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
+import { HStack } from '@chakra-ui/react';
 
 
 function Stopwatch() {
@@ -36,17 +37,22 @@ function Stopwatch() {
   };
 
   return (
-    <div>
-      <Text color={"blue.500"} fontSize={"4xl"}>Stopwatch</Text>
-      <Text color={'pink.300'} fontSize={"2xl"}>Time: {time} seconds</Text>
-      {/* <button onClick={handleStart}>Start</button>
-      <button onClick={handlePause}>Pause</button>
-      <button onClick={handleReset}>Reset</button> */}
-      <Button colorScheme={'blue'} onClick={handleStart}>Start</Button>
-      <Button colorScheme={'blue'} onClick={handlePause}>Pause</Button>
-      <Button colorScheme={'blue'} onClick={handleReset}>Reset</Button>
+    <VStack spacing={4} py={"2"}>
 
-    </div>
+      <HStack justifyContent={"space-between"} py={"2"} px={"40"} >
+        
+        <Text color={'teal.400'} fontSize={"2xl"}>Time: {time} seconds</Text>
+
+      </HStack>
+
+      <HStack borderBottomWidth={2} paddingBottom={5}>
+        <Button colorScheme={'blue'} onClick={handleStart}>Start</Button>
+        <Button colorScheme={'blue'} onClick={handlePause}>Pause</Button>
+        <Button colorScheme={'blue'} onClick={handleReset}>Reset</Button>
+      </HStack>
+
+    </VStack>
+    
   );
 }
 

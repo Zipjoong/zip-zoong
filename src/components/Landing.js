@@ -18,7 +18,7 @@ export default function Landing() {
                 <Text>FaceMesh를 사용하여 보다 정확한 집중시간을 측정해보세요!</Text>
                 </CardBody>
                 <CardFooter>
-                    <Link to="/stop">
+                    <Link to="/todo">
                         <Button align='center' shadow={'xl'} colorScheme='green'>Start</Button>
                     
                     </Link>

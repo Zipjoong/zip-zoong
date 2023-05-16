@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { Box, List, ListItem, Text, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter, Input, VStack, StackDivider, HStack, IconButton } from "@chakra-ui/react";
 import {MdDelete, MdAddCircle} from 'react-icons/md';
 
@@ -14,8 +14,8 @@ export default function TodoListPage() {
   const [newTodoTitle, setNewTodoTitle] = useState("");
 
   const navigate = useNavigate();
-  const onClickList = (id) => {
-    navigate(`/detail/${id}`)
+  const onClickList = (id,title) => {
+    navigate(`detail/${id}`, { state: { title } })
   }
 
   const handleAddTodo = () => {
@@ -50,7 +50,7 @@ export default function TodoListPage() {
 
 
      
-      <Box bg={'green.200'} padding={'20'} overflow={'hidden'} rounded={'xl'} shadow={'dark-lg'}>
+      <Box my={'5'} bg={'green.200'} padding={'20'} overflow={'hidden'} rounded={'xl'} shadow={'dark-lg'}>
         <HStack justifyContent={"space-between"} mb={'12'} borderBottomWidth={2} borderBottomColor={'blackAlpha.300'}>
           <Text mb='1' as={'b'} fontSize={'xl'}> Add Subject </Text>
           <Box >
@@ -69,7 +69,7 @@ export default function TodoListPage() {
                 <HStack justifyContent={"space-between"} py={"5"} px={"5"}>
 
                 {/* <Link to={'/details/${todo.id}'}> */}
-                  <Text as={'b'} onClick={() => onClickList(todo.id)}>{todo.title}</Text>
+                  <Text as={'b'} onClick={() => onClickList(todo.id,todo.title)}>{todo.title}</Text>
                 {/* </Link> */}
                 
                 <IconButton colorScheme="red" size='lg' ml={2} onClick={() => handleDeleteTodo(todo.id)} icon={<MdDelete/>} />

@@ -34,7 +34,7 @@ const router = createBrowserRouter([
             element: <TodoListPage />,
         },
         {
-            path:'detail/:Uid',
+            path:'todo/detail/:Uid',
             element: <TodoDetailsPage />,
         },
         
