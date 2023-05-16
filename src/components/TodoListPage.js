@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Box, List, ListItem, Text, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter, Input, VStack, StackDivider, HStack, IconButton } from "@chakra-ui/react";
 import {MdDelete, MdAddCircle} from 'react-icons/md';
+
 export default function TodoListPage() {
   const [todos, setTodos] = useState([
     { id: 1, title: "Math" },
@@ -11,6 +12,11 @@ export default function TodoListPage() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newTodoTitle, setNewTodoTitle] = useState("");
+
+  const navigate = useNavigate();
+  const onClickList = (id) => {
+    navigate(`/detail/${id}`)
+  }
 
   const handleAddTodo = () => {
     const newTodo = {
@@ -61,9 +67,10 @@ export default function TodoListPage() {
             <ListItem key={todo.id} width={64}>
               <Box bg={'green.300'} overflow={'hidden'} rounded={'xl'} shadow={'lg'}>
                 <HStack justifyContent={"space-between"} py={"5"} px={"5"}>
-                <Link to={'/details/${todo.id}'}>
-                  <Text as={'b'}>{todo.title}</Text>
-                </Link>
+
+                {/* <Link to={'/details/${todo.id}'}> */}
+                  <Text as={'b'} onClick={() => onClickList(todo.id)}>{todo.title}</Text>
+                {/* </Link> */}
                 
                 <IconButton colorScheme="red" size='lg' ml={2} onClick={() => handleDeleteTodo(todo.id)} icon={<MdDelete/>} />
                  

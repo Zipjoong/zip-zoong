@@ -5,6 +5,7 @@ import Stopwatch from "./components/Stopwatch";
 import Test from "./components/Test";
 import Landing from "./components/Landing";
 import TodoListPage from "./components/TodoListPage";
+import TodoDetailsPage from "./components/TodoDetailsPage";
 
 
 
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
         {
             path:"todo",
             element: <TodoListPage />,
+        },
+        {
+            path:'detail/:Uid',
+            element: <TodoDetailsPage />,
         },
         
     ]
