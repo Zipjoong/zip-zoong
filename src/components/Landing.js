@@ -9,8 +9,8 @@ export default function Landing() {
     return(
         // <Center>
            <Box >
-            <Grid mt={10} px={40} columnGap={10} templateColumns={"repeat(3,1fr)"}>
-            <Card align='center' variant={'filled'} padding={10} shadow={'dark-lg'}>
+            <Grid py={10} px={40} columnGap={10} templateColumns={"repeat(3,1fr)"}>
+            <Card align='center' variant={'filled'} padding={10} shadow={'dark-lg'} bg={'gray.200'}>
                 <CardHeader>
                 <Heading size='lg'> Check Your Study Time </Heading>
                 </CardHeader>
@@ -24,7 +24,7 @@ export default function Landing() {
                     </Link>
                 </CardFooter>
             </Card>
-            <Card align='center' variant={'filled'} padding={10} shadow={'dark-lg'}>
+            <Card align='center' variant={'filled'} padding={10} shadow={'dark-lg'} bg={'gray.200'}>
                 <CardHeader>
                 <Heading size='lg'> CamStudy</Heading>
                 </CardHeader>
@@ -39,7 +39,7 @@ export default function Landing() {
                 
                 </CardFooter>
             </Card>
-            <Card align='center' variant={'filled'} padding={10} shadow={'dark-lg'}>
+            <Card align='center' variant={'filled'} padding={10} shadow={'dark-lg'} bg={'gray.200'}>
                 <CardHeader>
                 <Heading size='lg'> Dashboard</Heading>
                 </CardHeader>

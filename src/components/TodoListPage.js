@@ -37,7 +37,7 @@ export default function TodoListPage() {
   return (
 
     <VStack 
-      divider={<StackDivider borderColor={'gray.200'}/>}
+      divider={<StackDivider borderColor={'blackAlpha.500'}/>}
       spacing={4}
       py={"5"}
     >
@@ -50,7 +50,7 @@ export default function TodoListPage() {
 
 
      
-      <Box my={'5'} bg={'green.200'} padding={'20'} overflow={'hidden'} rounded={'xl'} shadow={'dark-lg'}>
+      <Box my={'5'} bg={'gray.200'} padding={'20'} overflow={'hidden'} rounded={'xl'} shadow={'dark-lg'}>
         <HStack justifyContent={"space-between"} mb={'12'} borderBottomWidth={2} borderBottomColor={'blackAlpha.300'}>
           <Text mb='1' as={'b'} fontSize={'xl'}> Add Subject </Text>
           <Box >

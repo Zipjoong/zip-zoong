@@ -24,7 +24,7 @@ function TodoDetailsPage() {
         <Box>
           <Stopwatch />
         </Box>
-      <Box my={5} bg="green.200" padding={20} overflow="hidden" rounded="xl" shadow="dark-lg">
+      <Box my={5} bg="gray.200" padding={20} overflow="hidden" rounded="xl" shadow="dark-lg">
         {/* <FaceMeshPage /> */}
       </Box>
       </Box>

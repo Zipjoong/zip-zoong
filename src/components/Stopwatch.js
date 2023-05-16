@@ -1,7 +1,13 @@
-import { Button,Text, VStack} from '@chakra-ui/react';
+import { Button, Text, VStack } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
 import { HStack } from '@chakra-ui/react';
 
+function formatTime(time) {
+  const hours = Math.floor(time / 3600).toString().padStart(2, '0');
+  const minutes = Math.floor((time % 3600) / 60).toString().padStart(2, '0');
+  const seconds = (time % 60).toString().padStart(2, '0');
+  return `${hours}:${minutes}:${seconds}`;
+}
 
 function Stopwatch() {
   const [time, setTime] = useState(0);
@@ -38,21 +44,18 @@ function Stopwatch() {
 
   return (
     <VStack spacing={4} py={"2"}>
-
-      <HStack justifyContent={"space-between"} py={"2"} px={"40"} >
-        
-        <Text color={'teal.400'} fontSize={"2xl"}>Time: {time} seconds</Text>
-
+      <HStack justifyContent={"space-between"} py={"2"} px={"40"}>
+        <Text color={'teal.400'} fontSize={"2xl"}>
+          Time: {formatTime(time)}
+        </Text>
       </HStack>
 
-      <HStack borderBottomWidth={2} paddingBottom={5}>
+      <HStack borderBottomWidth={2} paddingBottom={5} borderColor={'blackAlpha.500'}>
         <Button colorScheme={'blue'} onClick={handleStart}>Start</Button>
         <Button colorScheme={'blue'} onClick={handlePause}>Pause</Button>
         <Button colorScheme={'blue'} onClick={handleReset}>Reset</Button>
       </HStack>
-
     </VStack>
-    
   );
 }
 

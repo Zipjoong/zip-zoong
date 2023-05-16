@@ -6,12 +6,12 @@ export default function Test() {
   return (
   
   <Box>
-    <HStack justifyContent={"space-between"} py={"5"} px={"40"} borderBottomWidth={1}>
+    <HStack justifyContent={"space-between"} py={"5"} px={"40"} borderBottomWidth={1} bg={'orange.200'} shadow={'dark-lg'}>
       <Box color={"green.500"}>
         <RiCameraLensLine size={"48"} />
       </Box>
 
-      <Text color={"yellow.500"} fontSize={"6xl"}>
+      <Text color={"yellow.500"} fontSize={"6xl"} >
         ZipZoong 
         
         {/* <Outlet/> */}
@@ -26,7 +26,10 @@ export default function Test() {
       
 
     </HStack>
+    <Box bg={'orange.100'}>
     <Outlet/>
+    </Box>
+    
     
     
     </Box>
