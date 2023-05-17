@@ -1,6 +1,5 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import "@tensorflow/tfjs";
-// Register WebGL backend.
 import "@tensorflow/tfjs-backend-webgl";
 import "@mediapipe/face_mesh";
 import Webcam from "react-webcam";
@@ -18,31 +17,44 @@ const videoConstraints = {
   facingMode: "user",
 };
 
+const MAX_INACTIVE_TIME = 3000; // 일정 시간 (밀리초) 동안 비활성 상태로 판단합니다.
+const CHECK_INTERVAL = 1000; // 체크 간격 (밀리초)
+
 export default function FaceMeshPage() {
   const canvasRef = useRef(null);
   const webcamRef = useRef(null);
   const [loaded, setLoaded] = useState(false);
+  const [isFaceMeshActive, setIsFaceMeshActive] = useState(true);
+  const [lastActiveTime, setLastActiveTime] = useState(Date.now());
 
+  useEffect(() => {
+    const interval = setInterval(checkFaceMeshActivity, CHECK_INTERVAL);
 
-  
+    return () => clearInterval(interval);
+  }, []);
 
-  const handleVideoLoad = (videoNode) => {
-    console.log(videoNode); // videoNode는 onLoadedData를 통해 받아온 event  객체
-    const video = videoNode.target; // 다음과 같이 onLoadedData 이벤트 핸들러 함수에서 target 프로퍼티를 활용하여 로드된 미디어 데이터를 참조할 수 있습니다.
-    if (video.readyState !== 4) return; // video가 loaded 되지 않았을때 종료
-    if (loaded) return; // loaded 되었으면 runDetector함수가 이미 실행 되었으므로 종료
-    runDetector(video, canvasRef.current);
-    setLoaded(true); // react-webcam이 loaded 되었다고 state를 변경함.
+  const checkFaceMeshActivity = () => {
+    if (Date.now() - lastActiveTime > MAX_INACTIVE_TIME) {
+      setIsFaceMeshActive(false);
+    } else {
+      setIsFaceMeshActive(true);
+    }
   };
 
-  
+  const handleVideoLoad = (videoNode) => {
+    const video = videoNode.target;
+    if (video.readyState !== 4) return;
+    if (loaded) return;
+    runDetector(video, canvasRef.current);
+    setLoaded(true);
+    setLastActiveTime(Date.now());
+  };
 
   const canvasStyle = {
     position: "absolute",
     top: -60,
     left: 0,
     zIndex: 1,
-    
   };
 
   return (
@@ -62,9 +74,8 @@ export default function FaceMeshPage() {
         height={inputResolution.height}
         style={canvasStyle}
       />
+      {!isFaceMeshActive && <header>FaceMesh is inactive.</header>}
       {loaded ? <></> : <header>Loading...</header>}
     </Box>
   );
 }
-
- 

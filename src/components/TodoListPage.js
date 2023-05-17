@@ -1,22 +1,51 @@
+// TodoListPage
 import { useState } from "react";
-import {  useNavigate } from "react-router-dom";
-import { Box, List, ListItem, Text, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter, Input, VStack, StackDivider, HStack, IconButton } from "@chakra-ui/react";
-import {MdDelete, MdAddCircle} from 'react-icons/md';
+import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import {
+  Box,
+  List,
+  ListItem,
+  Text,
+  Button,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Input,
+  VStack,
+  StackDivider,
+  HStack,
+  IconButton,
+} from "@chakra-ui/react";
+import { MdDelete, MdAddCircle } from "react-icons/md";
 
 export default function TodoListPage() {
   const [todos, setTodos] = useState([
     { id: 1, title: "Math" },
     { id: 2, title: "Korean" },
-    
   ]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newTodoTitle, setNewTodoTitle] = useState("");
 
+  const location = useLocation();
+  //const sstopwatchValue = state && state.stopwatchValue;
+  //const previousPage = location.state && location.state.previousPage;
+  //const sstopwatchValue = location.state && location.state.stopwatchValue;
+  
+  
+  //console.log(location.state,"listtime")
+  //console.log(location.sv,"listtime")
+  console.log(location,"listtime")
+
   const navigate = useNavigate();
-  const onClickList = (id,title) => {
-    navigate(`detail/${id}`, { state: { title } })
-  }
+
+  const onClickList = (id, title) => {
+    navigate(`detail/${id}`, { state: { title, previousPage: "TodoListPage" , stopwatchValue: 'some value'} });
+  };
 
   const handleAddTodo = () => {
     const newTodo = {
@@ -35,57 +64,43 @@ export default function TodoListPage() {
   };
 
   return (
-
-    <VStack 
-      divider={<StackDivider borderColor={'blackAlpha.500'}/>}
-      spacing={4}
-      py={"5"}
-    >
-      {/* <Box p={4}> */}
+    <VStack divider={<StackDivider borderColor={"blackAlpha.500"} />} spacing={4} py={"5"}>
       <Box>
-        <Text as={'b'} fontSize={'3xl'}>Total Time : </Text>
-        
-        
+        <Text as={"b"} fontSize={"3xl"}>
+          Total Time :
+        </Text>
+
+        <Text>
+          {/* Total Time : {sstopwatchValue} */}
+        </Text>
       </Box>
 
-
-     
-      <Box my={'5'} bg={'gray.200'} padding={'20'} overflow={'hidden'} rounded={'xl'} shadow={'dark-lg'}>
-        <HStack justifyContent={"space-between"} mb={'12'} borderBottomWidth={2} borderBottomColor={'blackAlpha.300'}>
-          <Text mb='1' as={'b'} fontSize={'xl'}> Add Subject </Text>
-          <Box >
-            
-            <IconButton mb='1' colorScheme="green" icon={<MdAddCircle/>} onClick={() => setIsModalOpen(true)}>Add Todo</IconButton>
+      <Box my={"5"} bg={"gray.200"} padding={"20"} overflow={"hidden"} rounded={"xl"} shadow={"dark-lg"}>
+        <HStack justifyContent={"space-between"} mb={"12"} borderBottomWidth={2} borderBottomColor={"blackAlpha.300"}>
+          <Text mb="1" as={"b"} fontSize={"xl"}>
+            Add Subject
+          </Text>
+          <Box>
+            <IconButton mb="1" colorScheme="green" icon={<MdAddCircle />} onClick={() => setIsModalOpen(true)}>
+              Add Todo
+            </IconButton>
           </Box>
         </HStack>
 
-
-      
-      <List spacing={6}>
-        {todos.map((todo) => (
-          
+        <List spacing={6}>
+          {todos.map((todo) => (
             <ListItem key={todo.id} width={64}>
-              <Box bg={'green.300'} overflow={'hidden'} rounded={'xl'} shadow={'lg'}>
+              <Box bg={"green.300"} overflow={"hidden"} rounded={"xl"} shadow={"lg"}>
                 <HStack justifyContent={"space-between"} py={"5"} px={"5"}>
-
-                {/* <Link to={'/details/${todo.id}'}> */}
-                  <Text as={'b'} onClick={() => onClickList(todo.id,todo.title)}>{todo.title}</Text>
-                {/* </Link> */}
-                
-                <IconButton colorScheme="red" size='lg' ml={2} onClick={() => handleDeleteTodo(todo.id)} icon={<MdDelete/>} />
-                 
-              
-
+                  <Text as={"b"} onClick={() => onClickList(todo.id, todo.title)}>
+                    {todo.title}
+                  </Text>
+                  <IconButton colorScheme="red" size="lg" ml={2} onClick={() => handleDeleteTodo(todo.id)} icon={<MdDelete />} />
                 </HStack>
-                
               </Box>
             </ListItem>
-
-
-          
-          
-        ))}
-      </List>
+          ))}
+        </List>
       </Box>
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
@@ -103,11 +118,6 @@ export default function TodoListPage() {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    {/* </Box> */}
-
-
     </VStack>
-    
   );
 }
-

@@ -9,7 +9,7 @@ function formatTime(time) {
   return `${hours}:${minutes}:${seconds}`;
 }
 
-function Stopwatch() {
+function Stopwatch({ timef }) {
   const [time, setTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
 
@@ -26,8 +26,11 @@ function Stopwatch() {
 
     return () => {
       clearInterval(interval);
+      timef(time); // 콜백 함수 호출하여 값 전달
     };
   }, [isRunning]);
+
+  
 
   const handleStart = () => {
     setIsRunning(true);
@@ -50,7 +53,7 @@ function Stopwatch() {
         </Text>
       </HStack>
 
-      <HStack borderBottomWidth={2} paddingBottom={5} borderColor={'blackAlpha.500'}>
+      <HStack borderBottomWidth={2} paddingBottom={5} >
         <Button colorScheme={'blue'} onClick={handleStart}>Start</Button>
         <Button colorScheme={'blue'} onClick={handlePause}>Pause</Button>
         <Button colorScheme={'blue'} onClick={handleReset}>Reset</Button>
