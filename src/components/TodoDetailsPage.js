@@ -1,12 +1,12 @@
 // TodoDetailsPage
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
-import { Box, Center, Text, VStack,Button } from "@chakra-ui/react";
-import Stopwatch from "./Stopwatch";
+import { Box, VStack,Button } from "@chakra-ui/react";
+
 import FaceMeshPage from "./FaceMeshPage";
 
 function TodoDetailsPage() {
-  const { id } = useParams();
+  //const { id } = useParams();
   const { state } = useLocation();
   const title = state && state.title;
   const previousPage = state && state.previousPage;
@@ -28,19 +28,17 @@ function TodoDetailsPage() {
   return (
     <VStack>
       <Box p={4}>
-        <Center>
+        {/* <Center>
           <Text as={"b"} color={"green.700"} fontSize={"3xl"}>
             {title}
             
           </Text>
-        </Center>
+        </Center> */}
 
-        <Box>
-          <Stopwatch timef={timef}/>
-        </Box>
+    
 
         <Box my={5} bg="gray.200" padding={20} overflow="hidden" rounded="xl" shadow="dark-lg">
-          <FaceMeshPage />
+          <FaceMeshPage title={title}/>
         </Box>
 
         {previousPage === 'TodoListPage' && (

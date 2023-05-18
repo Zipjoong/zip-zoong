@@ -1,4 +1,4 @@
-import { Button, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, Text, VStack } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
 import { HStack } from '@chakra-ui/react';
 
@@ -9,14 +9,18 @@ function formatTime(time) {
   return `${hours}:${minutes}:${seconds}`;
 }
 
-function Stopwatch({ timef }) {
+function Stopwatch({ timef ,tisRunning, subtitle }) {
   const [time, setTime] = useState(0);
-  const [isRunning, setIsRunning] = useState(false);
+  const [isRunning, setIsRunning] = useState(tisRunning);
+  //console.log(tisRunning,"WHAT?")
 
   useEffect(() => {
     let interval = null;
 
-    if (isRunning) {
+    
+
+    if (tisRunning && isRunning) {
+
       interval = setInterval(() => {
         setTime(prevTime => prevTime + 1);
       }, 1000);
@@ -28,7 +32,7 @@ function Stopwatch({ timef }) {
       clearInterval(interval);
       timef(time); // 콜백 함수 호출하여 값 전달
     };
-  }, [isRunning]);
+  }, [tisRunning,isRunning]);
 
   
 
@@ -47,11 +51,19 @@ function Stopwatch({ timef }) {
 
   return (
     <VStack spacing={4} py={"2"}>
-      <HStack justifyContent={"space-between"} py={"2"} px={"40"}>
+
+      <Box>
+      <Text as={"b"} color={"green.700"} fontSize={"3xl"}> {subtitle}</Text>
+      </Box>
+
+      <HStack justifyContent={"space-between"} py={"1"} px={"40"}>
         <Text color={'teal.400'} fontSize={"2xl"}>
           Time: {formatTime(time)}
+          
         </Text>
       </HStack>
+
+      
 
       <HStack borderBottomWidth={2} paddingBottom={5} >
         <Button colorScheme={'blue'} onClick={handleStart}>Start</Button>
