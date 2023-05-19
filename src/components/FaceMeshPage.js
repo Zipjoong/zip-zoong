@@ -6,7 +6,8 @@ import { drawMesh } from "../utils/drawMesh";
 import "@tensorflow/tfjs-backend-webgl";
 import "@mediapipe/face_mesh";
 import Webcam from "react-webcam";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
+
 
 import { Box, VStack,Button } from "@chakra-ui/react";
 import Stopwatch from "./Stopwatch";
@@ -31,6 +32,7 @@ export default function FaceMeshPage({title}) {
   const canvasRef = useRef(null);
   const webcamRef = useRef(null);
   const [loaded, setLoaded] = useState(false);
+  const [reqID, setreqID] = useState(null);
 
   const [listtime, setlisttime] = useState('');
   const [FaceDetected, setFaceDetected] = useState(false);
@@ -38,7 +40,30 @@ export default function FaceMeshPage({title}) {
 
   const navigate = useNavigate();
 
-  console.log(FaceDetected,'tHiSTisi')
+  
+
+  const handleGoBack = () => {
+    setLoaded(false);
+  
+    // WebGL 컨텍스트 해제
+    if (reqID) {
+      cancelAnimationFrame(reqID);
+      setreqID(null); // requestId 초기화
+    }
+  
+    const gl = canvasRef.current.getContext("webgl");
+    if (gl) {
+      gl.getExtension("WEBGL_lose_context").loseContext();
+      canvasRef.current.getContext("webgl", { preserveDrawingBuffer: true });
+      canvasRef.current.getContext("webgl", { preserveDrawingBuffer: false });
+    }
+  
+    // 페이지 이동
+    navigate("/landing"); // 이동하고자 하는 경로로 수정해주세요
+  };
+  
+
+  console.log(reqID,'tHiSTisi')
   
   const timef = (tt) => {
     console.log(tt,'hello');
@@ -79,6 +104,10 @@ export default function FaceMeshPage({title}) {
   
       const ctx = canvas.getContext("2d");
       requestAnimationFrame(() => drawMesh(faces[0], ctx));
+      //console.log(requestAnimationFrame(() => drawMesh(faces[0], ctx)),'asdfasdfasdfasdfasfqreerwrwe')
+      setreqID(requestAnimationFrame(() => drawMesh(faces[0], ctx)));
+
+
     };
   
     // 주기적인 얼굴 감지 호출 설정
@@ -112,17 +141,6 @@ export default function FaceMeshPage({title}) {
   };
 
 
-  const handleGoBack = () => {
-    // const canvasElement = canvasRef.current;
-  
-    // // 캔버스 크기 초기화
-    // canvasElement.width = inputResolution.width;
-    // canvasElement.height = inputResolution.height;
-    setLoaded(false);
-    //console.log(loaded);
-    
-    navigate(`/todo`);
-  };
   
   
 
@@ -172,15 +190,16 @@ export default function FaceMeshPage({title}) {
           />
           <canvas
             ref={canvasRef}
-            width={inputResolution.width ?? 100}
-            height={inputResolution.height ?? 100}
+            width={inputResolution.width}
+            height={inputResolution.height}
             style={canvasStyle}
           />
           {loaded ? <></> : <header>Loading...</header>}
         </Box>
       
       <Box>
-        <Button onClick={() => handleGoBack()}> TTTTTTTTTTTTTTTTtTodoListPage</Button>
+        
+        <Button onClick={() =>handleGoBack()}> TTTTTTTTTTTTTTTTtTodoListPage</Button>
       </Box>
 
     </VStack>
