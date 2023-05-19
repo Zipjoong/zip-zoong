@@ -8,13 +8,8 @@ import "@mediapipe/face_mesh";
 import Webcam from "react-webcam";
 import { useNavigate } from "react-router-dom";
 
-import { Box, VStack,Button } from "@chakra-ui/react";
+import { Box, VStack, Button } from "@chakra-ui/react";
 import Stopwatch from "./Stopwatch";
-
-
-
-
-
 
 const inputResolution = {
   width: 1080,
@@ -27,29 +22,25 @@ const videoConstraints = {
   facingMode: "user",
 };
 
-export default function FaceMeshPage({title}) {
+export default function FaceMeshPage({ title }) {
   const canvasRef = useRef(null);
   const webcamRef = useRef(null);
   const [loaded, setLoaded] = useState(false);
 
-  const [listtime, setlisttime] = useState('');
+  const [listtime, setlisttime] = useState("");
   const [FaceDetected, setFaceDetected] = useState(false);
   const [Subjecttitle, setSubjecttitle] = useState(title);
 
+  let noFaceDetected;
   const navigate = useNavigate();
 
-  console.log(FaceDetected,'tHiSTisi')
-  
+  console.log(FaceDetected, "tHiSTisi");
+
   const timef = (tt) => {
-    console.log(tt,'hello');
+    console.log(tt, "hello");
     setlisttime(tt);
-    console.log(listtime,'asdfasdf')
-  
+    console.log(listtime, "asdfasdf");
   };
-
-
-
-
 
   const runDetector = async (video, canvas) => {
     const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
@@ -60,75 +51,67 @@ export default function FaceMeshPage({title}) {
       model,
       detectorConfig
     );
-  
-    let noFaceDetected = false; // 얼굴이 감지되지 않는 상태를 나타내는 변수
-  
+
+    noFaceDetected = false; // 얼굴이 감지되지 않는 상태를 나타내는 변수
+
     // 얼굴 감지 함수 호출을 위한 변수
     let detectionInterval;
-    const detectionDelay = 3000; // 3초
-  
+    const detectionDelay = 1000; // 3초
+
     const detect = async () => {
       const estimationConfig = { flipHorizontal: true };
       const faces = await detector.estimateFaces(video, estimationConfig);
-  
+
       if (faces.length === 0) {
         noFaceDetected = true;
       } else {
         noFaceDetected = false;
       }
-  
+
       const ctx = canvas.getContext("2d");
       requestAnimationFrame(() => drawMesh(faces[0], ctx));
     };
-  
+
     // 주기적인 얼굴 감지 호출 설정
     const startDetection = () => {
       detect(); // 최초 호출
       detectionInterval = setInterval(detect, 10);
     };
-  
+
     // 3초 동안 얼굴이 감지되지 않으면 noFaceDetected를 true로 설정
     setTimeout(() => {
       noFaceDetected = true;
     }, detectionDelay);
-  
+
     startDetection(); // 얼굴 감지 시작
-  
+
     // 3초 이상 얼굴이 감지되지 않는 경우를 확인
     const checkNoFaceDetected = () => {
       if (noFaceDetected) {
         //console.log("No face detected for 3 seconds or more");
         setFaceDetected(true);
-        
       } else {
         //console.log("Face detected");
         setFaceDetected(false);
         // 얼굴 감지
       }
     };
-  
+
     // 일정한 간격으로 얼굴 감지 여부 확인
     setInterval(checkNoFaceDetected, detectionDelay);
   };
 
-
   const handleGoBack = () => {
     // const canvasElement = canvasRef.current;
-  
+
     // // 캔버스 크기 초기화
     // canvasElement.width = inputResolution.width;
     // canvasElement.height = inputResolution.height;
     setLoaded(false);
     //console.log(loaded);
-    
+
     navigate(`/todo`);
   };
-  
-  
-
-
-
-  
 
   const handleVideoLoad = (videoNode) => {
     console.log(videoNode); // videoNode는 onLoadedData를 통해 받아온 event  객체
@@ -139,54 +122,56 @@ export default function FaceMeshPage({title}) {
     setLoaded(true); // react-webcam이 loaded 되었다고 state를 변경함.
   };
 
-
-
-  
-
   const canvasStyle = {
     position: "absolute",
     top: -60,
     left: 0,
     zIndex: 1,
-    
   };
 
   return (
     <VStack>
       <Box>
-        <Stopwatch timef={timef} tisRunning={!FaceDetected} subtitle={Subjecttitle} />
+        <Stopwatch
+          timef={timef}
+          tisRunning={!FaceDetected}
+          subtitle={Subjecttitle}
+        />
       </Box>
 
-
-{/* 
+      {/* 
         {loaded ? } */}
-        <Box position="relative" width={inputResolution.width} height={inputResolution.height}>
-          <Webcam
-            width={inputResolution.width }
-            height={inputResolution.height }
-            style={{ position: "absolute", top: 0, left: 0, zIndex: 0 }}
-            videoConstraints={videoConstraints}
-            onLoadedData={handleVideoLoad}
-            mirrored={true}
-            ref={webcamRef}
-          />
+      <Box
+        position="relative"
+        width={inputResolution.width}
+        height={inputResolution.height}
+      >
+        <Webcam
+          width={inputResolution.width}
+          height={inputResolution.height}
+          style={{ position: "absolute", top: 0, left: 0, zIndex: 0 }}
+          videoConstraints={videoConstraints}
+          onLoadedData={handleVideoLoad}
+          mirrored={true}
+          ref={webcamRef}
+        />
+        {!noFaceDetected && (
           <canvas
             ref={canvasRef}
             width={inputResolution.width ?? 100}
             height={inputResolution.height ?? 100}
             style={canvasStyle}
           />
-          {loaded ? <></> : <header>Loading...</header>}
-        </Box>
-      
-      <Box>
-        <Button onClick={() => handleGoBack()}> TTTTTTTTTTTTTTTTtTodoListPage</Button>
+        )}
+        {loaded ? <></> : <header>Loading...</header>}
       </Box>
 
+      <Box>
+        <Button onClick={() => handleGoBack()}>
+          {" "}
+          TTTTTTTTTTTTTTTTtTodoListPage
+        </Button>
+      </Box>
     </VStack>
-
-    
   );
 }
-
- 
