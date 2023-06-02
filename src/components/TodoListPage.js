@@ -20,7 +20,7 @@ import {
 } from "@chakra-ui/react";
 import { MdDelete, MdAddCircle } from "react-icons/md";
 import { fireStore } from "../firbase";
-import { addDoc, onSnapshot,collection} from 'firebase/firestore';
+import { addDoc,updateDoc,deleteDoc, doc,onSnapshot,collection} from 'firebase/firestore';
 
 export default function TodoListPage() {
   const [todos, setTodos] = useState([]);
@@ -29,6 +29,7 @@ export default function TodoListPage() {
   const [newTodoTitle, setNewTodoTitle] = useState("");
 
   const navigate = useNavigate();
+  //console.log(todos)
 
   useEffect(() => {
     // Firestore에서 할 일 목록 가져오기
@@ -67,20 +68,19 @@ export default function TodoListPage() {
   };
 
   const handleDeleteTodo = (id) => {
-    fireStore.collection("todos")
-      .doc(id)
-      .delete()
+    deleteDoc(doc(fireStore,'todos',id))
       .catch((error) => {
         console.error("Error deleting document: ", error);
       });
   };
 
-  const handleAddSubTodo = (parentId) => {
+
+  const handleAddSubTodo = async (parentId) => {
     const newSubTodo = {
-      id: todos.length + 1,
+      id: Date.now(),
       title: "",
     };
-
+  
     const updatedTodos = todos.map((todo) => {
       if (todo.id === parentId) {
         return {
@@ -90,10 +90,21 @@ export default function TodoListPage() {
       }
       return todo;
     });
-
+  
     setTodos(updatedTodos);
-  };
+    try {
+      await updateDoc(doc(fireStore, 'todos', parentId), {
+        subTodos: updatedTodos.find((todo) => todo.id === parentId).subTodos,
+      });
+    } catch (error) {
+      console.error("Error updating document: ", error);
+    }
 
+
+
+
+
+  };
   const handleUpdateSubTodo = (parentId, subTodoId, value) => {
     const updatedTodos = todos.map((todo) => {
       if (todo.id === parentId) {
@@ -106,7 +117,7 @@ export default function TodoListPage() {
           }
           return subTodo;
         });
-
+  
         return {
           ...todo,
           subTodos: updatedSubTodos,
@@ -114,15 +125,15 @@ export default function TodoListPage() {
       }
       return todo;
     });
-
+  
     setTodos(updatedTodos);
   };
 
-  const handleDeleteSubTodo = (parentId, subTodoId) => {
+  const handleDeleteSubTodo = async (parentId, subTodoId) => {
     const updatedTodos = todos.map((todo) => {
       if (todo.id === parentId) {
         const updatedSubTodos = todo.subTodos.filter((subTodo) => subTodo.id !== subTodoId);
-
+  
         return {
           ...todo,
           subTodos: updatedSubTodos,
@@ -130,8 +141,16 @@ export default function TodoListPage() {
       }
       return todo;
     });
-
+  
     setTodos(updatedTodos);
+  
+    try {
+      await updateDoc(doc(fireStore, 'todos', parentId), {
+        subTodos: updatedTodos.find((todo) => todo.id === parentId).subTodos,
+      });
+    } catch (error) {
+      console.error("Error updating document: ", error);
+    }
   };
 
   return (

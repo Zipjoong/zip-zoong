@@ -1,8 +1,8 @@
-import {Navigate, Outlet, useNavigate} from "react-router-dom";
+import { Outlet, useNavigate} from "react-router-dom";
 import { useState } from "react";
 import {Box, Button, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, VStack, useDisclosure} from "@chakra-ui/react";
 import {RiCameraLensLine} from "react-icons/ri";
-import { fireStore,firebaseAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword } from "../firbase";
+import { firebaseAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword } from "../firbase";
 import { getAuth,signOut } from "firebase/auth";
 
 
@@ -23,6 +23,10 @@ export default function Test() {
   const [User, setUser] = useState("");
   const [IsAppropriate, setIsAppropriate] = useState();
   const [errorMsg, setErrorMsg] = useState("");
+
+
+  console.log(User.uid);
+  
   
 
   // `회원가입` 버튼의 onClick에 할당
