@@ -1,7 +1,5 @@
-// TodoListPage
-import { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
 import {
   Box,
   List,
@@ -21,60 +19,123 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import { MdDelete, MdAddCircle } from "react-icons/md";
+import { fireStore } from "../firbase";
+import { addDoc, onSnapshot,collection} from 'firebase/firestore';
 
 export default function TodoListPage() {
-  const [todos, setTodos] = useState([
-    { id: 1, title: "Math" },
-    { id: 2, title: "Korean" },
-  ]);
+  const [todos, setTodos] = useState([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newTodoTitle, setNewTodoTitle] = useState("");
 
-  const location = useLocation();
-  //const sstopwatchValue = state && state.stopwatchValue;
-  //const previousPage = location.state && location.state.previousPage;
-  //const sstopwatchValue = location.state && location.state.stopwatchValue;
-  
-  
-  //console.log(location.state,"listtime")
-  //console.log(location.sv,"listtime")
-  console.log(location,"listtime")
-
   const navigate = useNavigate();
 
+  useEffect(() => {
+    // Firestore에서 할 일 목록 가져오기
+    const unsubscribe = onSnapshot(collection(fireStore,'todos'),(snapshot) => {
+      const todosData = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setTodos(todosData);
+    });
+
+    return () => {
+      // Cleanup 함수: 구독 취소
+      unsubscribe();
+    };
+  }, []);
+
   const onClickList = (id, title) => {
-    navigate(`detail/${id}`, { state: { title, previousPage: "TodoListPage" , stopwatchValue: 'some value'} });
+    navigate(`detail/${id}`, { state: { title, previousPage: "TodoListPage" } });
   };
 
   const handleAddTodo = () => {
     const newTodo = {
-      id: todos.length + 1,
       title: newTodoTitle,
+      subTodos: [],
     };
 
-    setTodos([...todos, newTodo]);
-    setNewTodoTitle("");
-    setIsModalOpen(false);
+    addDoc(collection(fireStore,"todos"), (newTodo))
+      .then((docRef) => {
+        setNewTodoTitle("");
+        setIsModalOpen(false);
+      })
+      .catch((error) => {
+        console.error("Error adding document: ", error);
+      });
   };
 
   const handleDeleteTodo = (id) => {
-    const updatedTodos = todos.filter((todo) => todo.id !== id);
+    fireStore.collection("todos")
+      .doc(id)
+      .delete()
+      .catch((error) => {
+        console.error("Error deleting document: ", error);
+      });
+  };
+
+  const handleAddSubTodo = (parentId) => {
+    const newSubTodo = {
+      id: todos.length + 1,
+      title: "",
+    };
+
+    const updatedTodos = todos.map((todo) => {
+      if (todo.id === parentId) {
+        return {
+          ...todo,
+          subTodos: [...todo.subTodos, newSubTodo],
+        };
+      }
+      return todo;
+    });
+
+    setTodos(updatedTodos);
+  };
+
+  const handleUpdateSubTodo = (parentId, subTodoId, value) => {
+    const updatedTodos = todos.map((todo) => {
+      if (todo.id === parentId) {
+        const updatedSubTodos = todo.subTodos.map((subTodo) => {
+          if (subTodo.id === subTodoId) {
+            return {
+              ...subTodo,
+              title: value,
+            };
+          }
+          return subTodo;
+        });
+
+        return {
+          ...todo,
+          subTodos: updatedSubTodos,
+        };
+      }
+      return todo;
+    });
+
+    setTodos(updatedTodos);
+  };
+
+  const handleDeleteSubTodo = (parentId, subTodoId) => {
+    const updatedTodos = todos.map((todo) => {
+      if (todo.id === parentId) {
+        const updatedSubTodos = todo.subTodos.filter((subTodo) => subTodo.id !== subTodoId);
+
+        return {
+          ...todo,
+          subTodos: updatedSubTodos,
+        };
+      }
+      return todo;
+    });
+
     setTodos(updatedTodos);
   };
 
   return (
     <VStack divider={<StackDivider borderColor={"blackAlpha.500"} />} spacing={4} py={"5"}>
-      <Box>
-        <Text as={"b"} fontSize={"3xl"}>
-          Total Time :
-        </Text>
-
-        <Text>
-          {/* Total Time : {sstopwatchValue} */}
-        </Text>
-      </Box>
-
       <Box my={"5"} bg={"gray.200"} padding={"20"} overflow={"hidden"} rounded={"xl"} shadow={"dark-lg"}>
         <HStack justifyContent={"space-between"} mb={"12"} borderBottomWidth={2} borderBottomColor={"blackAlpha.300"}>
           <Text mb="1" as={"b"} fontSize={"xl"}>
@@ -97,6 +158,25 @@ export default function TodoListPage() {
                   </Text>
                   <IconButton colorScheme="red" size="lg" ml={2} onClick={() => handleDeleteTodo(todo.id)} icon={<MdDelete />} />
                 </HStack>
+
+                <VStack spacing={2}>
+                  {todo.subTodos.map((subTodo) => (
+                    <TodoItem
+                      key={subTodo.id}
+                      parentTodoId={todo.id}
+                      subTodo={subTodo}
+                      handleUpdateSubTodo={handleUpdateSubTodo}
+                      handleDeleteSubTodo={handleDeleteSubTodo}
+                    />
+                  ))}
+                  <IconButton
+                    colorScheme="green"
+                    icon={<MdAddCircle />}
+                    onClick={() => handleAddSubTodo(todo.id)}
+                  >
+                    Add Sub Todo
+                  </IconButton>
+                </VStack>
               </Box>
             </ListItem>
           ))}
@@ -121,3 +201,20 @@ export default function TodoListPage() {
     </VStack>
   );
 }
+
+const TodoItem = ({ parentTodoId, subTodo, handleUpdateSubTodo, handleDeleteSubTodo }) => {
+  const handleUpdate = (e) => {
+    handleUpdateSubTodo(parentTodoId, subTodo.id, e.target.value);
+  };
+
+  const handleDelete = () => {
+    handleDeleteSubTodo(parentTodoId, subTodo.id);
+  };
+
+  return (
+    <HStack>
+      <Input value={subTodo.title} onChange={handleUpdate} placeholder="Sub Todo title" />
+      <IconButton colorScheme="red" size="lg" ml={2} onClick={handleDelete} icon={<MdDelete />} />
+    </HStack>
+  );
+};
