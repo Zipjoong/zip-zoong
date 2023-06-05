@@ -6,6 +6,8 @@ import Landing from "./components/Landing";
 import TodoListPage from "./components/TodoListPage";
 import TodoDetailsPage from "./components/TodoDetailsPage";
 import CamStudy from "./components/CamStudy";
+import MyCalendar from "./components/MyCalendar";
+import MyChart from "./components/MyChart";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: "cam-study",
         element: <CamStudy />,
+      },
+      {
+        path: "calendar",
+        element: <MyCalendar />,
       },
     ],
   },
