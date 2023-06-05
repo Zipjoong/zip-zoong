@@ -43,6 +43,10 @@ const router = createBrowserRouter([
         path: "calendar",
         element: <MyCalendar />,
       },
+      {
+        path: "chart",
+        element: <MyChart />,
+      },
     ],
   },
 ]);
