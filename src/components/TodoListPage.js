@@ -147,9 +147,9 @@ const TodoSubList = ({ subjectId }) => {
 
   const handleAddTodo = () => {
     const newTodo = {
-      subjectId,
+      subject_id : subjectId,
       title: newTodoTitle,
-      timestamp: Date(),
+      timestamp: new Date.now(),
       // subTodos: [],
     };
 

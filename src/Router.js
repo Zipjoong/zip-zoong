@@ -8,6 +8,7 @@ import TodoDetailsPage from "./components/TodoDetailsPage";
 import CamStudy from "./components/CamStudy";
 import MyCalendar from "./components/MyCalendar";
 import MyChart from "./components/MyChart";
+import CallToActionWithAnnotation from "./components/Main";
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
       {
         path: "chart",
         element: <MyChart />,
+      },
+      {
+        path: "main",
+        element: <CallToActionWithAnnotation />,
       },
     ],
   },
