@@ -1,6 +1,6 @@
 // TodoDetailsPage
 import React, { useState } from "react";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
+import { useParams, useLocation, useNavigate,Link } from "react-router-dom";
 import { Box, VStack,Button } from "@chakra-ui/react";
 
 import FaceMeshPage from "./FaceMeshPage";
@@ -45,7 +45,10 @@ function TodoDetailsPage() {
           <Button onClick={goBack}>Go Back to TodoListPage</Button>
         )}
 
-        <Button onClick={() => goBack(listtime)}>Go Back to TTTTTTTTTTTTTTTTtTodoListPage</Button>
+        <Link to="/face">
+
+          <Button >Go Back to TTTTTTTTTTTTTTTTtTodoListPage</Button>
+        </Link>
       </Box>
     </VStack>
   );
