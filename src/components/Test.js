@@ -18,6 +18,7 @@ import {
   Text,
   VStack,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { RiCameraLensLine } from "react-icons/ri";
 import {
@@ -44,32 +45,6 @@ export default function Test() {
   const [User, setUser] = useState("");
   const [IsAppropriate, setIsAppropriate] = useState();
   const [errorMsg, setErrorMsg] = useState("");
-
-  // `회원가입` 버튼의 onClick에 할당
-  const register = async () => {
-    try {
-      setErrorMsg("　");
-      const createdUser = await createUserWithEmailAndPassword(
-        firebaseAuth,
-        registerEmail,
-        registerPassword
-      );
-      console.log(createdUser);
-    } catch (err) {
-      console.log(err.code);
-      switch (err.code) {
-        case "auth/weak-password":
-          setErrorMsg("비밀번호는 6자리 이상이어야 합니다");
-          break;
-        case "auth/invalid-email":
-          setErrorMsg("잘못된 이메일 주소입니다");
-          break;
-        case "auth/email-already-in-use":
-          setErrorMsg("이미 가입되어 있는 계정입니다");
-          break;
-      }
-    }
-  };
 
   const login = async () => {
     try {
@@ -122,17 +97,18 @@ export default function Test() {
         </Text>
 
         <HStack spacing={2}>
-          <Button color={"green.500"} onClick={modal1.onOpen}>
+          {/* <Button color={"green.500"} onClick={modal1.onOpen}>
             Sign up
-          </Button>
+          </Button> */}
           {user ? (
             <Button colorScheme={"green"} onClick={logout}>
               Log out
             </Button>
           ) : (
-            <Button colorScheme={"green"} onClick={modal2.onOpen}>
-              Log in
-            </Button>
+            // <Button colorScheme={"green"} onClick={modal2.onOpen}>
+            //   Log in
+            // </Button>
+            <Box></Box>
           )}
         </HStack>
 
@@ -155,11 +131,11 @@ export default function Test() {
                 />
               </VStack>
             </ModalBody>
-            <ModalFooter>
+            {/* <ModalFooter>
               <Button w={"100%"} colorScheme="red" onClick={register}>
                 SignUp
               </Button>
-            </ModalFooter>
+            </ModalFooter> */}
           </ModalContent>
         </Modal>
 
@@ -201,6 +177,7 @@ export default function Test() {
 export function CallToActionWithAnnotation() {
   const modal1 = useDisclosure();
   const modal2 = useDisclosure();
+  const toast = useToast();
 
   const nav = useNavigate();
 
@@ -224,17 +201,46 @@ export function CallToActionWithAnnotation() {
         registerPassword
       );
       console.log(createdUser);
+      toast({
+        title: "성공",
+        description: "회원가입이 완료되었습니다!",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
+      modal1.onClose();
     } catch (err) {
       console.log(err.code);
       switch (err.code) {
         case "auth/weak-password":
           setErrorMsg("비밀번호는 6자리 이상이어야 합니다");
+          toast({
+            title: "에러",
+            description: "비밀번호는 6자리 이상이어야 합니다",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+          });
           break;
         case "auth/invalid-email":
           setErrorMsg("잘못된 이메일 주소입니다");
+          toast({
+            title: "에러",
+            description: "잘못된 이메일 주소입니다",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+          });
           break;
         case "auth/email-already-in-use":
           setErrorMsg("이미 가입되어 있는 계정입니다");
+          toast({
+            title: "에러",
+            description: "이미 가입되어 있는 계정입니다",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+          });
           break;
       }
     }
@@ -250,10 +256,34 @@ export function CallToActionWithAnnotation() {
       console.log(curUserInfo);
       setUser(curUserInfo.user);
       modal2.onClose();
+
       nav("/landing");
     } catch (err) {
       setIsAppropriate(false);
-      // console.log(err.code);
+      console.log(err.code);
+
+      switch (err.code) {
+        case "auth/user-not-found":
+          setErrorMsg("존재하지 않는 ID입니다");
+          toast({
+            title: "에러",
+            description: "존재하지 않는 ID입니다",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+          break;
+        case "auth/wrong-password":
+          toast({
+            title: "에러",
+            description: "잘못된 비밀번호 입니다.",
+            status: "error",
+            duration: 2000,
+            isClosable: true,
+          });
+          break;
+      }
+
       /*
       입력한 아이디가 없을 경우 : auth/user-not-found.
       비밀번호가 잘못된 경우 : auth/wrong-password.
@@ -337,8 +367,9 @@ export function CallToActionWithAnnotation() {
                       onChange={(event) => setRegisterEmail(event.target.value)}
                     />
                     <Input
+                      type="password"
                       variant={"filled"}
-                      placeholder="Passward"
+                      placeholder="Password"
                       onChange={(event) =>
                         setRegisterPassword(event.target.value)
                       }
@@ -366,6 +397,7 @@ export function CallToActionWithAnnotation() {
                       onChange={(event) => setLoginEmail(event.target.value)}
                     />
                     <Input
+                      type="password"
                       variant={"filled"}
                       placeholder="Passward"
                       onChange={(event) => setLoginPassword(event.target.value)}
