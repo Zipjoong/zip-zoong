@@ -2875,10 +2875,30 @@
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz#b2ac626d6cb9c8718ab459166d4bb405b8ffa78b"
   integrity sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==
 
+"@mediapipe/camera_utils@^0.3.1675466862":
+  version "0.3.1675466862"
+  resolved "https://registry.yarnpkg.com/@mediapipe/camera_utils/-/camera_utils-0.3.1675466862.tgz#861051d4343325a7e838714fe72050df37c0cdd0"
+  integrity sha512-siuXBoUxWo9WL0MeAxIxvxY04bvbtdNl7uCxoJxiAiRtNnCYrurr7Vl5VYQ94P7Sq0gVq6PxIDhWWeZ/pLnSzw==
+
+"@mediapipe/drawing_utils@^0.3.1675466124":
+  version "0.3.1675466124"
+  resolved "https://registry.yarnpkg.com/@mediapipe/drawing_utils/-/drawing_utils-0.3.1675466124.tgz#40e9dd87ffaefc58aea7dac36a98cc917e0d90d0"
+  integrity sha512-/IWIB/iYRMtiUKe3k7yGqvwseWHCOqzVpRDfMgZ6gv9z7EEimg6iZbRluoPbcNKHbYSxN5yOvYTzUYb8KVf22Q==
+
 "@mediapipe/face_mesh@^0.4.1633559619":
   version "0.4.1633559619"
   resolved "https://registry.yarnpkg.com/@mediapipe/face_mesh/-/face_mesh-0.4.1633559619.tgz#f917e4448e25bc375a905d1d910f1bca450c5e23"
   integrity sha512-Vc8cdjxS5+O2gnjWH9KncYpUCVXT0h714KlWAsyqJvJbIgUJBqpppbIx8yWcAzBDxm/5cYSuBI5p5ySIPxzcEg==
+
+"@mediapipe/holistic@^0.5.1675471629":
+  version "0.5.1675471629"
+  resolved "https://registry.yarnpkg.com/@mediapipe/holistic/-/holistic-0.5.1675471629.tgz#f1127d43161ff27e8889d5d39aaea164f9730980"
+  integrity sha512-qY+cxtDeSOvVtevrLgnodiwXYaAtPi7dHZtNv/bUCGEjFicAOYtMmrZSqMmbPkTB2+4jLnPF1vgshkAqQRSYAw==
+
+"@mediapipe/pose@^0.5.1675469404":
+  version "0.5.1675469404"
+  resolved "https://registry.yarnpkg.com/@mediapipe/pose/-/pose-0.5.1675469404.tgz#8f81e64c6561b2357a021a134b54de0204bafc72"
+  integrity sha512-DFZsNWTsSphRIZppnUCuunzBiHP2FdJXR9ehc7mMi4KG+oPaOH0Em3d6kr7Py+TSyTXC1doH88KcF28k2sBxsQ==
 
 "@motionone/animation@^10.12.0":
   version "10.15.1"
@@ -5586,6 +5606,11 @@ detect-port-alt@^1.1.6:
   dependencies:
     address "^1.0.1"
     debug "^2.6.0"
+
+device-detector-js@2.2.10:
+  version "2.2.10"
+  resolved "https://registry.yarnpkg.com/device-detector-js/-/device-detector-js-2.2.10.tgz#a8fd47837ce89024d7647a4ddf18154d7a920538"
+  integrity sha512-zLcDSU10WIqbARXecaVJJxx0ZuGWq+MVhj9f9qehdBCFr9RMa5mQGTt2IZNIgKuCIind/j/DzRDViEdc2FfBGQ==
 
 didyoumean@^1.2.2:
   version "1.2.2"

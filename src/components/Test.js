@@ -27,6 +27,9 @@ import {
   signInWithEmailAndPassword,
 } from "../firbase";
 import { getAuth, signOut } from "firebase/auth";
+
+import NewHoli from "./Holi";
+
 //import CallToActionWithAnnotation from "./Main";
 
 export default function Test() {
@@ -166,6 +169,10 @@ export default function Test() {
           </ModalContent>
         </Modal>
       </HStack>
+
+      {/* <Box bg={"orange.100"}>
+        <NewHoli />
+      </Box> */}
 
       <Box bg={"orange.100"}>
         {user ? <Outlet /> : <CallToActionWithAnnotation />}
@@ -399,7 +406,7 @@ export function CallToActionWithAnnotation() {
                     <Input
                       type="password"
                       variant={"filled"}
-                      placeholder="Passward"
+                      placeholder="Password"
                       onChange={(event) => setLoginPassword(event.target.value)}
                     />
                   </VStack>
