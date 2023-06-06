@@ -1,11 +1,11 @@
-import { initializeApp } from 'firebase/app';
+import { initializeApp } from "firebase/app";
 import {
   getFirestore,
   collection,
   query,
   where,
   getDocs,
-} from 'firebase/firestore';
+} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -21,54 +21,52 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 async function getUsersFromDB() {
-  const usersCol = collection(db, 'users');
+  const usersCol = collection(db, "users");
   const userSnapshot = await getDocs(usersCol);
   // console.log('userSnapshot', userSnapshot);
   // console.log('userSnapshot.docs', userSnapshot.docs);
-  const userList = userSnapshot.docs.map(doc => doc.data());
-  console.log('userList', userList);
+  const userList = userSnapshot.docs.map((doc) => doc.data());
+  console.log("userList", userList);
 
   return userList;
 }
 
 async function getUsers(db) {
-  const querySnapshot = await getDocs(collection(db, 'users'));
+  const querySnapshot = await getDocs(collection(db, "users"));
   const querySnapshot2 = await getDocs(
-    collection(querySnapshot, 'study_record')
+    collection(querySnapshot, "study_record")
   );
-  console.log('222', querySnapshot2);
-  console.log('querySnapshot', querySnapshot);
-  console.log('querySnapshot.docs', querySnapshot.docs);
+  console.log("222", querySnapshot2);
+  console.log("querySnapshot", querySnapshot);
+  console.log("querySnapshot.docs", querySnapshot.docs);
   // console.log('testing', querySnapshot.docs.data);
-  console.log('forEachDoc');
-  querySnapshot.forEach(doc => {
+  console.log("forEachDoc");
+  querySnapshot.forEach((doc) => {
     console.log(doc.data());
   });
-  console.log('!!!!!!!!!!!!!!!!!!!!!!!');
+  console.log("!!!!!!!!!!!!!!!!!!!!!!!");
   console.log(querySnapshot.docs[0].data());
   getDocs(collection());
 }
 
 async function getUserStudyRecordsFromDB() {
-  const querySnapshot = await getDocs(
-    collection(db, '/users/6zlRWdioOCPqZlFL19FU/study_record')
-  );
-  const studyRecords = querySnapshot.docs.map(doc => doc.data());
-  console.log('studyRecords', studyRecords);
+  const querySnapshot = await getDocs(collection(db, "/STUDY_RECORDS"));
+  const studyRecords = querySnapshot.docs.map((doc) => doc.data());
+  console.log("studyRecords", studyRecords);
 
   return studyRecords;
 }
 
 async function getUserStudyRecordsFromDB2(userId) {
   const studyRecordsQuery = query(
-    collection(db, 'STUDY_RECORDS'),
-    where('user_id', '==', userId)
+    collection(db, "STUDY_RECORDS"),
+    where("user_id", "==", userId)
   );
   const studyRecordsQuerySnapshot = await getDocs(studyRecordsQuery);
   // console.log('studyRecordsQuerySnapshot', studyRecordsQuerySnapshot.docs);
 
   const rawData_studyRecords = [];
-  studyRecordsQuerySnapshot.forEach(doc => {
+  studyRecordsQuerySnapshot.forEach((doc) => {
     rawData_studyRecords.push(doc.data());
   });
   await console.log(rawData_studyRecords);
@@ -76,12 +74,12 @@ async function getUserStudyRecordsFromDB2(userId) {
   ////////////////////////
   const durationBySubjectId = [];
 
-  rawData_studyRecords.forEach(item => {
+  rawData_studyRecords.forEach((item) => {
     const { subject_id, end_time, start_time } = item;
-    const duration = end_time - start_time;
+    const duration = end_time.seconds - start_time.seconds;
 
     const isItemExist = durationBySubjectId.find(
-      item => item.subject_id === subject_id
+      (item) => item.subject_id === subject_id
     );
     if (isItemExist) {
       isItemExist.duration += duration;
@@ -90,28 +88,28 @@ async function getUserStudyRecordsFromDB2(userId) {
     }
   });
 
-  console.log('durationBySubjectId', durationBySubjectId);
+  console.log("durationBySubjectId", durationBySubjectId);
 
   /////////////////////////////////////////////////////////
-  const subjectsRef = collection(db, 'STUDY_SUBJECTS_TEST');
-  const subjectsQuery = query(subjectsRef, where('user_id', '==', userId));
+  const subjectsRef = collection(db, "STUDY_SUBJECTS_TEST");
+  const subjectsQuery = query(subjectsRef, where("user_id", "==", userId));
   const subjectsQuerySnapshot = await getDocs(subjectsQuery);
   const subjectsList = [];
-  await subjectsQuerySnapshot.forEach(doc => {
+  await subjectsQuerySnapshot.forEach((doc) => {
     const newSubjectsObject = doc.data();
     newSubjectsObject.subject_id = doc.id;
     subjectsList.push(newSubjectsObject);
   });
-  await console.log('subjectsList', subjectsList);
+  await console.log("subjectsList", subjectsList);
 
   // /////////////////////////////////////
 
-  const mergedArray = durationBySubjectId.map(item => {
+  const mergedArray = durationBySubjectId.map((item) => {
     const { subject_id, duration } = item;
     const matchingItem = subjectsList.find(
-      item => item.subject_id === subject_id
+      (item) => item.subject_id === subject_id
     );
-    const subject_name = matchingItem ? matchingItem.subject_name : '';
+    const subject_name = matchingItem ? matchingItem.subject_name : "";
 
     return {
       subject_id,

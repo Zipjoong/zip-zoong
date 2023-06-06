@@ -1,57 +1,57 @@
 //react & chakra-ui
-import React, { useEffect, useState } from 'react';
-import { Box, Text } from '@chakra-ui/react';
+import React, { useEffect, useState } from "react";
+import { Box, Text } from "@chakra-ui/react";
 //chart library
-import { ResponsivePie } from '@nivo/pie';
+import { ResponsivePie } from "@nivo/pie";
 // to do: chart library import
 
 //firebase
-import { getUserStudyRecordsFromDB2 } from './Firebase';
+import { getUserStudyRecordsFromDB2 } from "./Firebase";
 
 function MyChart() {
   const [studyRecordsState, setStudyRecordsState] = useState([
     {
-      id: 'ruby',
-      label: 'ruby',
+      id: "ruby",
+      label: "ruby",
       value: 251,
-      color: 'hsl(53, 70%, 50%)',
+      color: "hsl(53, 70%, 50%)",
     },
     {
-      id: 'go',
-      label: 'go',
+      id: "go",
+      label: "go",
       value: 409,
-      color: 'hsl(216, 70%, 50%)',
+      color: "hsl(216, 70%, 50%)",
     },
     {
-      id: 'sass',
-      label: 'sass',
+      id: "sass",
+      label: "sass",
       value: 479,
-      color: 'hsl(149, 70%, 50%)',
+      color: "hsl(149, 70%, 50%)",
     },
     {
-      id: 'erlang',
-      label: 'erlang',
+      id: "erlang",
+      label: "erlang",
       value: 358,
-      color: 'hsl(280, 70%, 50%)',
+      color: "hsl(280, 70%, 50%)",
     },
     {
-      id: 'php',
-      label: 'php',
+      id: "php",
+      label: "php",
       value: 353,
-      color: 'hsl(325, 70%, 50%)',
+      color: "hsl(325, 70%, 50%)",
     },
   ]);
 
   useEffect(() => {
     const fetchData = async () => {
       // await getUsersFromDB();
-      const studyRecordsFromFB = await getUserStudyRecordsFromDB2('0');
-      console.log('im here', studyRecordsFromFB);
+      const studyRecordsFromFB = await getUserStudyRecordsFromDB2("0");
+      console.log("im here", studyRecordsFromFB);
       const piechartList = manipulateData(studyRecordsFromFB);
-      await console.log('new one', piechartList);
+      await console.log("new one", piechartList);
 
       setStudyRecordsState(piechartList);
-      await console.log('useEffect end :(');
+      await console.log("useEffect end :(");
     };
     fetchData();
   }, []);
@@ -64,10 +64,10 @@ function MyChart() {
       <Box height={500}>
         <ResponsivePie
           layers={[
-            'arcLinkLabels',
-            'arcs',
-            'arcLabels',
-            'legends',
+            "arcLinkLabels",
+            "arcs",
+            "arcLabels",
+            "legends",
             ({ centerX, centerY, dataWithArc, arcGenerator }) => {
               const totalValue = studyRecordsState.reduce(
                 (total, d) => total + d.value,
@@ -79,7 +79,7 @@ function MyChart() {
                   <text
                     textAnchor="middle"
                     dominantBaseline="middle"
-                    style={{ fontSize: '24px', fontWeight: 'bold' }}
+                    style={{ fontSize: "24px", fontWeight: "bold" }}
                   >
                     {totalValue}
                   </text>
@@ -87,7 +87,7 @@ function MyChart() {
                     y={24}
                     textAnchor="middle"
                     dominantBaseline="middle"
-                    style={{ fontSize: '16px' }}
+                    style={{ fontSize: "16px" }}
                   >
                     Total
                   </text>
@@ -102,19 +102,19 @@ function MyChart() {
           padAngle={0.7}
           cornerRadius={3}
           activeOuterRadiusOffset={8}
-          colors={{ scheme: 'nivo' }}
+          colors={{ scheme: "nivo" }}
           borderWidth={NaN}
           borderColor={{
-            from: 'color',
-            modifiers: [['darker', '0.2']],
+            from: "color",
+            modifiers: [["darker", "0.2"]],
           }}
           arcLinkLabelsSkipAngle={12}
           arcLinkLabelsTextColor="#333333"
           arcLinkLabelsThickness={2}
-          arcLinkLabelsColor={{ from: 'color' }}
+          arcLinkLabelsColor={{ from: "color" }}
           arcLabelsTextColor={{
-            from: 'color',
-            modifiers: [['darker', 2]],
+            from: "color",
+            modifiers: [["darker", 2]],
           }}
           legends={[]}
         />
@@ -129,11 +129,11 @@ function manipulateData(originData) {
     newList.push({
       id: d.subject_name,
       label: d.subject_name,
-      value: d.duration,
-      color: 'hsl(325, 70%, 50%)',
+      value: d.duration / 60,
+      color: "hsl(325, 70%, 50%)",
     });
   }
-  console.log('in the function', newList);
+  console.log("in the function", newList);
 
   return newList;
 }
