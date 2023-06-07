@@ -1,19 +1,15 @@
 // TodoDetailsPage
 import React, { useState, useEffect } from "react";
-import { useParams, useLocation, useNavigate, Link } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { Box, VStack, Button } from "@chakra-ui/react";
 import NewHoli from "./Holi";
-import { tile } from "@tensorflow/tfjs";
 
 function TodoDetailsPage() {
-  //const { id } = useParams();
   const { state } = useLocation();
   const title = state && state.title;
   const docid = state.docid;
   const previousPage = state && state.previousPage;
   const navigate = useNavigate();
-
-  console.log(state);
 
   const goBack = () => {
     navigate(`/todo`);

@@ -62,11 +62,12 @@ export default function TodoListPage() {
   }, []);
 
   const onClickList = (subjectId, subjectTitle) => {
-    //클릭하면 STUDYRECORDS에 업데이트
+    //클릭하면 STUDYRECORDS에 add
     const newSubject = {
       subject_id: subjectId,
       user_id: user.uid,
       start_time: serverTimestamp(),
+      end_time: serverTimestamp(),
     };
 
     addDoc(collection(fireStore, "STUDY_RECORDS"), newSubject)

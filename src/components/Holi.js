@@ -4,6 +4,13 @@ import { Holistic } from "@mediapipe/holistic";
 import * as cam from "@mediapipe/camera_utils";
 import { Box, Button, VStack, Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import {
+  collection,
+  doc,
+  serverTimestamp,
+  updateDoc,
+} from "firebase/firestore";
+import { fireStore } from "../firbase";
 
 function formatTime(time) {
   const hours = Math.floor(time / 3600)
@@ -16,7 +23,7 @@ function formatTime(time) {
   return `${hours}:${minutes}:${seconds}`;
 }
 
-function NewHoli(subjecttitle, docid) {
+function NewHoli({ subjecttitle, docid }) {
   const webcamRef = useRef(null);
   const cameraRef = useRef(null);
   const [FaceDetected, setFaceDetected] = useState(false);
@@ -26,7 +33,7 @@ function NewHoli(subjecttitle, docid) {
 
   console.log(subjecttitle, "from testdetailpage");
 
-  console.log(docid, "from testdetailpage");
+  console.log(docid, "from docid dsds");
 
   function onResultsHolistic(results) {
     if (!webcamRef.current) return;
@@ -80,6 +87,11 @@ function NewHoli(subjecttitle, docid) {
     if (cameraRef.current) {
       cameraRef.current.stop(); // 카메라 중지
     }
+    ///////////////////////////////////////////////
+    //여기에 종료 시간 Records에 업데이트 해야함
+    updateDoc(doc(fireStore, "STUDY_RECORDS", docid), {
+      end_time: serverTimestamp(),
+    });
   };
   ////// 여기 훅은 FaceDetected 체크용  ////////////////
   useEffect(() => {
@@ -129,6 +141,9 @@ function NewHoli(subjecttitle, docid) {
         <Link to="/todo">
           <Button onClick={handleButtonClick}>Go Back to Todo List Page</Button>
         </Link>
+      </Box>
+      <Box>
+        <Text>{subjecttitle}</Text>
       </Box>
     </VStack>
   );
