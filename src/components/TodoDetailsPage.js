@@ -1,5 +1,5 @@
 // TodoDetailsPage
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { Box, VStack, Button } from "@chakra-ui/react";
 import NewHoli from "./Holi";

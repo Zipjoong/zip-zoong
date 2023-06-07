@@ -31,14 +31,40 @@ function NewHoli({ subjecttitle, docid }) {
   const [time, setTime] = useState(0);
   const [elapsedTime, setElapsedTime] = useState(0);
 
-  console.log(subjecttitle, "from testdetailpage");
+  // console.log(subjecttitle, "from testdetailpage");
+  // console.log(docid, "from docid dsds");
+  function eyeclosed(results, videox, videoy) {
+    let rp26;
+    let rp35;
+    let rp14;
+    let reyeEAR;
 
-  console.log(docid, "from docid dsds");
+    rp26 = Math.abs(
+      results.faceLandmarks[144].y * videoy -
+        results.faceLandmarks[160].y * videoy
+    );
+    rp35 = Math.abs(
+      results.faceLandmarks[145].y * videoy -
+        results.faceLandmarks[159].y * videoy
+    );
+
+    rp14 = Math.abs(
+      results.faceLandmarks[133].x * videox -
+        results.faceLandmarks[33].x * videox
+    );
+
+    reyeEAR = (rp26 + rp35) / (2 * rp14);
+
+    console.log(reyeEAR, "HELLLO!@");
+  }
 
   function onResultsHolistic(results) {
     if (!webcamRef.current) return;
     const videoWidth = webcamRef.current.video.videoWidth;
     const videoHeight = webcamRef.current.video.videoHeight;
+    if (results["faceLandmarks"]) {
+      eyeclosed(results, videoWidth, videoHeight);
+    }
 
     setFaceDetected(results["faceLandmarks"] === undefined ? true : false);
   }

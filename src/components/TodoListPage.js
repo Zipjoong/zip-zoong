@@ -19,13 +19,12 @@ import {
   IconButton,
   Checkbox,
 } from "@chakra-ui/react";
-import { MdDelete, MdAddCircle, MdCheckBox } from "react-icons/md";
+import { MdDelete, MdAddCircle } from "react-icons/md";
 import { fireStore } from "../firbase";
 import {
   addDoc,
   updateDoc,
   deleteDoc,
-  getDocs,
   doc,
   query,
   where,
@@ -40,8 +39,6 @@ export default function TodoListPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newSubjectTitle, setNewSubjectTitle] = useState("");
   const [dura, setDura] = useState();
-
-  const [sum, setSum] = useState();
 
   const navigate = useNavigate();
 
@@ -84,7 +81,7 @@ export default function TodoListPage() {
       });
       console.log(groups, "===================");
       // 집계된 그룹의 start_time 값을 합산
-      const totalSum = Object.values(groups);
+      //const totalSum = Object.values(groups);
       //.reduce((acc, val) => acc + val, 0);
       setDura(groups);
 
