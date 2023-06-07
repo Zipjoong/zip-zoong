@@ -65,9 +65,11 @@ export default function Landing() {
             <Text>TBD</Text>
           </CardBody>
           <CardFooter>
-            <Button shadow={"xl"} colorScheme="green">
-              View here
-            </Button>
+            <Link to="/chart">
+              <Button align="center" shadow={"xl"} colorScheme="green">
+                Start
+              </Button>
+            </Link>
           </CardFooter>
         </Card>
       </Grid>

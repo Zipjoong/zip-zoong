@@ -4,6 +4,7 @@ import { Box, Text } from "@chakra-ui/react";
 //chart library
 import { ResponsivePie } from "@nivo/pie";
 // to do: chart library import
+import { getAuth } from "firebase/auth";
 
 //firebase
 import { getUserStudyRecordsFromDB2 } from "./Firebase";
@@ -42,10 +43,13 @@ function MyChart() {
     },
   ]);
 
+  const auth = getAuth();
+  const user = auth.currentUser;
+
   useEffect(() => {
     const fetchData = async () => {
       // await getUsersFromDB();
-      const studyRecordsFromFB = await getUserStudyRecordsFromDB2("0");
+      const studyRecordsFromFB = await getUserStudyRecordsFromDB2(user.uid);
       console.log("im here", studyRecordsFromFB);
       const piechartList = manipulateData(studyRecordsFromFB);
       await console.log("new one", piechartList);
