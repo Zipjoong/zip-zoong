@@ -25,6 +25,7 @@ import {
   addDoc,
   updateDoc,
   deleteDoc,
+  getDocs,
   doc,
   query,
   where,
@@ -38,6 +39,10 @@ export default function TodoListPage() {
   const [subjects, setSubjects] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newSubjectTitle, setNewSubjectTitle] = useState("");
+  const [dura, setDura] = useState();
+
+  const [sum, setSum] = useState();
+
   const navigate = useNavigate();
 
   const auth = getAuth();
@@ -54,6 +59,37 @@ export default function TodoListPage() {
         ...doc.data(),
       }));
       setSubjects(subjectsData);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    // 컴포넌트가 마운트될 때 데이터 가져오기
+    const q = query(
+      collection(fireStore, "STUDY_RECORDS"),
+      where("user_id", "==", user.uid)
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const groups = {};
+      snapshot.forEach((doc) => {
+        const { subject_id, start_time, end_time } = doc.data();
+        if (!groups[subject_id]) {
+          groups[subject_id] = 0;
+        }
+        groups[subject_id] += end_time - start_time;
+      });
+      console.log(groups, "===================");
+      // 집계된 그룹의 start_time 값을 합산
+      const totalSum = Object.values(groups);
+      //.reduce((acc, val) => acc + val, 0);
+      setDura(groups);
+
+      //setSum(totalSum);
+      //console.log(parseInt(totalSum[0]));
     });
 
     return () => {
