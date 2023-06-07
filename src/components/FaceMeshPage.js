@@ -37,11 +37,11 @@ export default function FaceMeshPage({ title }) {
 
   console.log(reqID, "tHiSTisi");
 
-  const timef = (tt) => {
-    console.log(tt, "hello");
-    setlisttime(tt);
-    console.log(listtime, "asdfasdf");
-  };
+  // const timef = (tt) => {
+  //   console.log(tt, "hello");
+  //   setlisttime(tt);
+  //   console.log(listtime, "asdfasdf");
+  // };
 
   const runDetector = async (video, canvas) => {
     const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
@@ -124,7 +124,7 @@ export default function FaceMeshPage({ title }) {
     <VStack>
       <Box>
         <Stopwatch
-          timef={timef}
+          // timef={timef}
           tisRunning={!FaceDetected}
           subtitle={Subjecttitle}
         />
