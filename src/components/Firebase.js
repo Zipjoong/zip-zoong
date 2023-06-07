@@ -30,6 +30,16 @@ async function getUsersFromDB() {
 
   return userList;
 }
+async function getUsersREST(uid) {
+  if (uid) {
+    //uid가 있는 경우 한명의 유저를 들고옴
+    console.log("uid가 있습니다.", uid);
+  } else {
+    //uid가 없는 경우 모든유저를 들고옴.
+    console.log("uid 없음.", uid);
+    const querySnapshot = await getDocs(collection(db, "users"));
+  }
+}
 
 async function getUsers(db) {
   const querySnapshot = await getDocs(collection(db, "users"));
@@ -49,51 +59,52 @@ async function getUsers(db) {
   getDocs(collection());
 }
 
-async function getUserStudyRecordsFromDB() {
-  const querySnapshot = await getDocs(collection(db, "/STUDY_RECORDS"));
-  const studyRecords = querySnapshot.docs.map((doc) => doc.data());
-  console.log("studyRecords", studyRecords);
-
-  return studyRecords;
-}
-
-async function getUserStudyRecordsFromDB2(userId) {
+async function getStudyRecordsOfUserXIncludeSubjectName(uid) {
+  // 1. uid 에 해당하는 공부기록들을 모두 찾음
   const studyRecordsQuery = query(
     collection(db, "STUDY_RECORDS"),
-    where("user_id", "==", userId)
+    where("user_id", "==", uid)
   );
   const studyRecordsQuerySnapshot = await getDocs(studyRecordsQuery);
-  // console.log('studyRecordsQuerySnapshot', studyRecordsQuerySnapshot.docs);
 
-  const rawData_studyRecords = [];
-  studyRecordsQuerySnapshot.forEach((doc) => {
-    rawData_studyRecords.push(doc.data());
-  });
-  await console.log(rawData_studyRecords);
+  // 리스트에 저장하는 방법1
+  // const rawData_studyRecords = [];
+  // studyRecordsQuerySnapshot.forEach((doc) => {
+  //   rawData_studyRecords.push(doc.data());
+  // });
 
-  ////////////////////////
-  const durationBySubjectId = [];
+  // 리스트에 저장하는 방법2
+  const studyRecordsList = studyRecordsQuerySnapshot.docs.map((doc) =>
+    doc.data()
+  );
 
-  rawData_studyRecords.forEach((item) => {
+  await console.log("studyRecordsList", studyRecordsList);
+  ///////////// !!!!!!여기서 리턴함
+
+  // 2. 공부기록들을 { subject_id : ㅁㅁ, duration : ㅁㅁ } 의 배열로 만듬.
+  const StudyRecordsListWithEachStudyDuration = [];
+  studyRecordsList.forEach((item) => {
     const { subject_id, end_time, start_time } = item;
     const duration = end_time.seconds - start_time.seconds;
-
-    const isItemExist = durationBySubjectId.find(
+    const isItemExist = StudyRecordsListWithEachStudyDuration.find(
       (item) => item.subject_id === subject_id
     );
     if (isItemExist) {
       isItemExist.duration += duration;
     } else {
-      durationBySubjectId.push({ subject_id, duration });
+      StudyRecordsListWithEachStudyDuration.push({ subject_id, duration });
     }
   });
+  await console.log(
+    "StudyRecordsList With EachStudyDuration",
+    StudyRecordsListWithEachStudyDuration
+  );
 
-  console.log("durationBySubjectId", durationBySubjectId);
-
-  /////////////////////////////////////////////////////////
+  // 3. uid 에 해당하는 과목들 불러오기
   const subjectsRef = collection(db, "STUDY_SUBJECTS_TEST");
-  const subjectsQuery = query(subjectsRef, where("user_id", "==", userId));
+  const subjectsQuery = query(subjectsRef, where("user_id", "==", uid));
   const subjectsQuerySnapshot = await getDocs(subjectsQuery);
+
   const subjectsList = [];
   await subjectsQuerySnapshot.forEach((doc) => {
     const newSubjectsObject = doc.data();
@@ -102,9 +113,8 @@ async function getUserStudyRecordsFromDB2(userId) {
   });
   await console.log("subjectsList", subjectsList);
 
-  // /////////////////////////////////////
-
-  const mergedArray = durationBySubjectId.map((item) => {
+  // 3. 과목id, 공부시간, 과목이름이 들어있는 리스트 만듬: {subject_id: ㅁㅁ, duration: ㅁㅁ, subject_name: ㅁㅁ}
+  const mergedArray = StudyRecordsListWithEachStudyDuration.map((item) => {
     const { subject_id, duration } = item;
     const matchingItem = subjectsList.find(
       (item) => item.subject_id === subject_id
@@ -118,43 +128,8 @@ async function getUserStudyRecordsFromDB2(userId) {
     };
   });
 
-  // mergedArray();
   await console.log(mergedArray);
 
-  ///////////////////////
-  // // 공부 기록을 담을 배열
-
-  // // study_records 컬렉션의 각 문서에 대해 반복
-  // for (const doc of studyRecordsquerySnapshot.docs) {
-  //   const recordData = doc.data();
-  //   const subjectId = recordData.subject_id;
-  //   const startTime = recordData.start_time;
-  //   const endTime = recordData.end_time;
-
-  //   // study_subjects 컬렉션에서 해당 과목 정보 조회
-  //   const subjectDoc = await db
-  //     .collection('STUDY_SUBJECTS_TEST')
-  //     .doc(subjectId)
-  //     .get();
-
-  //   if (subjectDoc.exists) {
-  //     const subjectData = subjectDoc.data();
-  //     const subjectName = subjectData.subject_name;
-
-  //     // 각 과목의 공부 시간 계산
-  //     const studyTime = endTime - startTime;
-
-  //     // 결과 리스트에 과목 이름과 공부 시간 추가
-  //     recordsList.push({
-  //       subjectName,
-  //       studyTime,
-  //     });
-  //   } else {
-  //     console.log('해당 과목이 존재하지 않습니다.');
-  //   }
-  // }
-
-  // console.log(recordsList);
   return mergedArray;
 }
 
@@ -173,6 +148,6 @@ async function writeUsers(db) {
 
 export {
   getUsersFromDB,
-  getUserStudyRecordsFromDB,
-  getUserStudyRecordsFromDB2,
+  getStudyRecordsOfUserXIncludeSubjectName,
+  getUsersREST,
 };

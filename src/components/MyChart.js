@@ -7,7 +7,7 @@ import { ResponsivePie } from "@nivo/pie";
 import { getAuth } from "firebase/auth";
 
 //firebase
-import { getUserStudyRecordsFromDB2 } from "./Firebase";
+import { getStudyRecordsOfUserXIncludeSubjectName } from "./Firebase";
 
 function MyChart() {
   const [studyRecordsState, setStudyRecordsState] = useState([
@@ -49,7 +49,9 @@ function MyChart() {
   useEffect(() => {
     const fetchData = async () => {
       // await getUsersFromDB();
-      const studyRecordsFromFB = await getUserStudyRecordsFromDB2(user.uid);
+      const studyRecordsFromFB = await getStudyRecordsOfUserXIncludeSubjectName(
+        "0"
+      );
       console.log("im here", studyRecordsFromFB);
       const piechartList = manipulateData(studyRecordsFromFB);
       await console.log("new one", piechartList);

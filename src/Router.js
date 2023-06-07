@@ -8,6 +8,7 @@ import TodoDetailsPage from "./components/TodoDetailsPage";
 import CamStudy from "./components/CamStudy";
 import MyCalendar from "./components/MyCalendar";
 import MyChart from "./components/MyChart";
+import JamesTest from "./components/JamesTest";
 
 const router = createBrowserRouter([
   {
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
         element: <MyChart />,
       },
     ],
+  },
+  {
+    path: "/james",
+    element: <JamesTest />,
   },
 ]);
 
