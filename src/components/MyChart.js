@@ -48,16 +48,21 @@ function MyChart() {
 
   useEffect(() => {
     const fetchData = async () => {
-      // await getUsersFromDB();
-      const studyRecordsFromFB = await getStudyRecordsOfUserXIncludeSubjectName(
-        "0"
+      await console.log("-------- useEffect start :)");
+      const studyRecordsListFromFirebase =
+        await getStudyRecordsOfUserXIncludeSubjectName("0");
+      await console.log(
+        "studyRecordsFromFirebase",
+        studyRecordsListFromFirebase
       );
-      console.log("im here", studyRecordsFromFB);
-      const piechartList = manipulateData(studyRecordsFromFB);
-      await console.log("new one", piechartList);
-
+      await console.log("-------- ↑firebase에서 들고온 재료");
+      const piechartList = converFirebaseDataToChartData(
+        studyRecordsListFromFirebase
+      );
+      await console.log("piechartList", piechartList);
       setStudyRecordsState(piechartList);
-      await console.log("useEffect end :(");
+
+      await console.log("-------- useEffect end :(");
     };
     fetchData();
   }, []);
@@ -129,7 +134,7 @@ function MyChart() {
   );
 }
 
-function manipulateData(originData) {
+function converFirebaseDataToChartData(originData) {
   const newList = [];
   for (const d of originData) {
     newList.push({
@@ -139,8 +144,6 @@ function manipulateData(originData) {
       color: "hsl(325, 70%, 50%)",
     });
   }
-  console.log("in the function", newList);
-
   return newList;
 }
 

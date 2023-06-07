@@ -6,23 +6,26 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 //firebase
-import { getUsersFromDB, getUserStudyRecordsFromDB } from "./Firebase";
+import { getStudyRecordsOfUserXForCalendar } from "./Firebase";
 
-function convertUserStudyRecords_ForCalendarEvents(studyRecord) {
-  var calEvents = [];
-  for (var i = 0; i < studyRecord.length; i++) {
-    console.log("study records i", studyRecord[i]);
-    const studyTime =
-      studyRecord[i].end_time.seconds - studyRecord[i].start_time.seconds;
-    console.log("study time: ", studyTime);
+function convertFirebaseDataToCalendarData(studyRecordsForEachSubject) {
+  const calEvents = [];
+  for (var i = 0; i < studyRecordsForEachSubject.length; i++) {
+    // console.log("study records i", studyRecordsForEachSubject[i]);
+    const studyDuration =
+      studyRecordsForEachSubject[i].end_time.seconds -
+      studyRecordsForEachSubject[i].start_time.seconds;
     calEvents.push({
-      title: studyTime / 60 + "분 공부",
-      start: new Date(studyRecord[i].start_time.seconds * 1000),
-      end: new Date(studyRecord[i].end_time.seconds * 1000),
+      title:
+        studyRecordsForEachSubject[i].subject_name +
+        " " +
+        studyDuration / 60 +
+        "분 공부",
+      start: new Date(studyRecordsForEachSubject[i].start_time.seconds * 1000),
+      end: new Date(studyRecordsForEachSubject[i].end_time.seconds * 1000),
     });
   }
 
-  console.log("calEvents", calEvents);
   return calEvents;
 }
 
@@ -36,16 +39,28 @@ function MyCalendar() {
       pk: "1",
     },
   ]);
-  console.log(studyRecordsState);
 
   useEffect(() => {
     const fetchData = async () => {
-      await getUsersFromDB();
-      const studyRecordsFromFB = await getUserStudyRecordsFromDB();
-      const studyRecordsForCalendarEvents =
-        convertUserStudyRecords_ForCalendarEvents(studyRecordsFromFB);
-      await setStudyRecordsState(studyRecordsForCalendarEvents);
-      await console.log("useEffect end :(");
+      await console.log("-------- useEffect start :)");
+
+      const studyRecordsFromFirebase = await getStudyRecordsOfUserXForCalendar(
+        "0"
+      );
+      await console.log(
+        "studyRecordsListFromFirebase",
+        studyRecordsFromFirebase
+      );
+      await console.log("-------- ↑firebase에서 들고온 재료");
+      const studyRecordsForCalendarEvents = convertFirebaseDataToCalendarData(
+        studyRecordsFromFirebase
+      );
+      await console.log(
+        "studyRecordsForCalendarEvents",
+        studyRecordsForCalendarEvents
+      );
+      setStudyRecordsState(studyRecordsForCalendarEvents);
+      await console.log("-------- useEffect end :(");
     };
     fetchData();
   }, []);
