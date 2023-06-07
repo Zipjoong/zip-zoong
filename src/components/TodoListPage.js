@@ -80,7 +80,7 @@ export default function TodoListPage() {
         if (!groups[subject_id]) {
           groups[subject_id] = 0;
         }
-        groups[subject_id] += end_time - start_time;
+        groups[subject_id] += parseInt(end_time - start_time);
       });
       console.log(groups, "===================");
       // 집계된 그룹의 start_time 값을 합산
@@ -195,6 +195,8 @@ export default function TodoListPage() {
                   >
                     {subject.title}
                   </Text>
+                  <Text>{dura && dura[subject.id]}</Text>
+
                   <IconButton
                     colorScheme="red"
                     size="lg"
