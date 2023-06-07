@@ -27,7 +27,7 @@ function NewHoli({ subjecttitle, docid }) {
   const webcamRef = useRef(null);
   const cameraRef = useRef(null);
   const [FaceDetected, setFaceDetected] = useState(false);
-  const [isRunning, setIsRunning] = useState(false); // 처음 부터 타이머 시작할거면 초기값 true로 변경 ㅍ필요
+  const [isRunning, setIsRunning] = useState(true); // 처음 부터 타이머 시작할거면 초기값 true로 변경 ㅍ필요
   const [time, setTime] = useState(0);
   const [elapsedTime, setElapsedTime] = useState(0);
 
@@ -91,6 +91,7 @@ function NewHoli({ subjecttitle, docid }) {
     //여기에 종료 시간 Records에 업데이트 해야함
     updateDoc(doc(fireStore, "STUDY_RECORDS", docid), {
       end_time: serverTimestamp(),
+      real_study_time: time,
     });
   };
   ////// 여기 훅은 FaceDetected 체크용  ////////////////

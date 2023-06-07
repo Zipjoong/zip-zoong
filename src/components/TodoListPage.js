@@ -76,11 +76,11 @@ export default function TodoListPage() {
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const groups = {};
       snapshot.forEach((doc) => {
-        const { subject_id, start_time, end_time } = doc.data();
+        const { subject_id, real_study_time } = doc.data();
         if (!groups[subject_id]) {
           groups[subject_id] = 0;
         }
-        groups[subject_id] += parseInt(end_time - start_time);
+        groups[subject_id] += real_study_time;
       });
       console.log(groups, "===================");
       // 집계된 그룹의 start_time 값을 합산
@@ -104,6 +104,7 @@ export default function TodoListPage() {
       user_id: user.uid,
       start_time: serverTimestamp(),
       end_time: serverTimestamp(),
+      real_study_time: 0,
     };
 
     addDoc(collection(fireStore, "STUDY_RECORDS"), newSubject)
