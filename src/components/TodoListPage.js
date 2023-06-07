@@ -30,6 +30,7 @@ import {
   where,
   onSnapshot,
   collection,
+  serverTimestamp,
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
@@ -61,9 +62,27 @@ export default function TodoListPage() {
   }, []);
 
   const onClickList = (subjectId, subjectTitle) => {
-    navigate(`detail/${subjectId}`, {
-      state: { title: subjectTitle, previousPage: "TodoListPage" },
-    });
+    //클릭하면 STUDYRECORDS에 업데이트
+    const newSubject = {
+      subject_id: subjectId,
+      user_id: user.uid,
+      start_time: serverTimestamp(),
+    };
+
+    addDoc(collection(fireStore, "STUDY_RECORDS"), newSubject)
+      .then((docRef) => {
+        console.log(docRef.id);
+        navigate(`detail/${subjectId}`, {
+          state: {
+            title: subjectTitle,
+            docid: docRef.id,
+            previousPage: "TodoListPage",
+          },
+        });
+      })
+      .catch((error) => {
+        console.error("Error adding document: ", error);
+      });
   };
 
   const handleAddSubject = () => {

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Webcam from "react-webcam";
 import { Holistic } from "@mediapipe/holistic";
 import * as cam from "@mediapipe/camera_utils";
-import { Box, Button, VStack } from "@chakra-ui/react";
+import { Box, Button, VStack, Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
 function formatTime(time) {
@@ -16,13 +16,17 @@ function formatTime(time) {
   return `${hours}:${minutes}:${seconds}`;
 }
 
-function NewHoli() {
+function NewHoli(subjecttitle, docid) {
   const webcamRef = useRef(null);
   const cameraRef = useRef(null);
   const [FaceDetected, setFaceDetected] = useState(false);
-  const [isRunning, setIsRunning] = useState(false);
+  const [isRunning, setIsRunning] = useState(false); // 처음 부터 타이머 시작할거면 초기값 true로 변경 ㅍ필요
   const [time, setTime] = useState(0);
   const [elapsedTime, setElapsedTime] = useState(0);
+
+  console.log(subjecttitle, "from testdetailpage");
+
+  console.log(docid, "from testdetailpage");
 
   function onResultsHolistic(results) {
     if (!webcamRef.current) return;
@@ -77,16 +81,11 @@ function NewHoli() {
       cameraRef.current.stop(); // 카메라 중지
     }
   };
-
+  ////// 여기 훅은 FaceDetected 체크용  ////////////////
   useEffect(() => {
     console.log(FaceDetected);
-    // if (!FaceDetected) {
-    //   setIsRunning(true);
-    // } else {
-    //   setIsRunning(false);
-    // }
   }, [FaceDetected]);
-
+  //////////////////////////////////////////////////
   useEffect(() => {
     let interval = null;
     console.log("asdf");
@@ -118,24 +117,12 @@ function NewHoli() {
     setIsRunning(false);
   };
 
-  // const formatTime = (time) => {
-  //   const hours = Math.floor(time / 3600000)
-  //     .toString()
-  //     .padStart(2, "0");
-  //   const minutes = Math.floor((time % 3600000) / 60000)
-  //     .toString()
-  //     .padStart(2, "0");
-  //   const seconds = Math.floor((time % 60000) / 1000)
-  //     .toString()
-  //     .padStart(2, "0");
-  //   return `${hours}:${minutes}:${seconds}`;
-  // };
-
   return (
     <VStack>
       <Box>
         <Webcam ref={webcamRef} />
-        <p>Elapsed Time: {formatTime(time)}</p>
+        <Text>Elapsed Time: {formatTime(time)}</Text>
+
         <Button onClick={handleStart}>Start</Button>
         <Button onClick={handlePause}>Pause</Button>
         <Button onClick={handleReset}>Reset</Button>
