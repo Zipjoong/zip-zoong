@@ -10,53 +10,85 @@ import { getAuth } from "firebase/auth";
 //firebase
 import { getStudyRecordsOfUserXIncludeSubjectName } from "./Firebase";
 
-function remainOnlyDate(date_time) {
-  date_time.setHours(0, 0, 0, 0);
-  console.log("0000으로 세팅함", date_time);
-  var nextDate = new Date(date_time);
-  nextDate = nextDate.setDate(date_time.getDate() + 1);
-  nextDate = new Date(nextDate);
-  console.log("nextDAte", nextDate);
-  const dateOnly1 = date_time.toISOString().split("T")[0];
+function remainOnlyDate(start_date_time) {
+  start_date_time.setHours(0, 0, 0, 0);
+  start_date_time = new Date();
+  start_date_time.setDate(start_date_time.getDate());
+  console.log("@@@@@@@@@@@@@@@@@@@@@@@", start_date_time);
+  var nextDate = new Date();
+  nextDate.setDate(start_date_time.getDate() + 1);
+  console.log("################", nextDate);
+  console.log(nextDate.toISOString());
+  // console.log("0000으로 세팅함", start_date_time);
+  // /////////////////////
+  // var temp_date = new Date();
+  // temp_date.setDate(start_date_time.getDate() - 1);
+  // var prevDate = temp_date;
+  // var nextDate = start_date_time;
+
+  // const dateOnly1 = prevDate.toISOString().split("T")[0];
+  // const dateOnly2 = nextDate.toISOString().split("T")[0];
+
+  // return [dateOnly1, "2023-06-08"];
+
+  /////////////////
+  // var nextDate = new Date(date_time);
+  // nextDate = nextDate.setDate(date_time.getDate() + 1);
+  // nextDate = new Date(nextDate);
+  // console.log("nextDAte", nextDate);
+  const dateOnly1 = start_date_time.toISOString().split("T")[0];
   const dateOnly2 = nextDate.toISOString().split("T")[0];
 
   console.log("?????????????", dateOnly1, dateOnly2);
   return [dateOnly1, dateOnly2];
 }
 
-function MyChart() {
-  console.log("컴포넌트 로드됨");
-  const [studyRecordsState, setStudyRecordsState] = useState([
-    {
-      id: "ruby",
-      label: "ruby",
-      value: 251,
-      color: "hsl(53, 70%, 50%)",
-    },
-    {
-      id: "go",
-      label: "go",
-      value: 409,
-      color: "hsl(216, 70%, 50%)",
-    },
-    {
-      id: "sass",
-      label: "sass",
-      value: 479,
-      color: "hsl(149, 70%, 50%)",
-    },
-    {
-      id: "erlang",
-      label: "erlang",
-      value: 358,
-      color: "hsl(280, 70%, 50%)",
-    },
-    {
-      id: "php",
-      label: "php",
-      value: 353,
+function converFirebaseDataToChartData(originData) {
+  const newList = [];
+  for (const d of originData) {
+    newList.push({
+      id: d.subject_name,
+      label: d.subject_name,
+      value: d.real_dura,
       color: "hsl(325, 70%, 50%)",
-    },
+    });
+  }
+  return newList;
+}
+
+function MyChart() {
+  console.log("차트 컴포넌트 로드됨");
+  const [studyRecordsState, setStudyRecordsState] = useState([
+    // {
+    //   id: "ruby",
+    //   label: "ruby",
+    //   value: 251,
+    //   color: "hsl(53, 70%, 50%)",
+    // },
+    // {
+    //   id: "go",
+    //   label: "go",
+    //   value: 409,
+    //   color: "hsl(216, 70%, 50%)",
+    // },
+    // {
+    //   id: "sass",
+    //   label: "sass",
+    //   value: 479,
+    //   color: "hsl(149, 70%, 50%)",
+    // },
+    // {
+    //   id: "erlang",
+    //   label: "erlang",
+    //   value: 358,
+    //   color: "hsl(280, 70%, 50%)",
+    // },
+    // {
+    //   id: "php",
+    //   label: "php",
+    //   value: 353,
+    //   color: "hsl(325, 70%, 50%)",
+    // },
   ]);
   const [calData, setCalData] = useState(null);
 
@@ -101,9 +133,6 @@ function MyChart() {
 
   return (
     <Box>
-      <Text>asdf</Text>
-      <Text>hello</Text>
-
       <Box height={500}>
         <ResponsivePie
           layers={[
@@ -167,19 +196,6 @@ function MyChart() {
       </Box>
     </Box>
   );
-}
-
-function converFirebaseDataToChartData(originData) {
-  const newList = [];
-  for (const d of originData) {
-    newList.push({
-      id: d.subject_name,
-      label: d.subject_name,
-      value: d.duration / 60,
-      color: "hsl(325, 70%, 50%)",
-    });
-  }
-  return newList;
 }
 
 export default MyChart;

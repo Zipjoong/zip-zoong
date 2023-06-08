@@ -22,12 +22,14 @@ function convertFirebaseDataToCalendarData(studyRecordsForEachSubject) {
     const studyDuration = studyRecordsForEachSubject[i].real_study_time;
     // const seletedColor =
     //   palette[studyRecordsForEachSubject[i].subject_id % palette.length];
-    const a = studyDuration / 60 / 150;
-    const seletedColor = "rgba(0,0,255," + 1 + ")";
+    const colorPower = studyDuration / 60;
+    const seletedColor = "rgba(0,0,255," + colorPower + ")";
     calEvents.push({
       title:
         studyRecordsForEachSubject[i].subject_name +
         " " +
+        Math.floor(studyDuration / 3600) +
+        ":" +
         Math.floor(studyDuration / 60) +
         ":" +
         (studyDuration % 60),

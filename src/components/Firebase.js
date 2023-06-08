@@ -153,15 +153,21 @@ async function getStudyRecordsOfUserXIncludeSubjectName(uid, fromA, toB) {
   // 2. 공부기록들을 { subject_id : ㅁㅁ, duration : ㅁㅁ } 의 배열로 만듬.
   const StudyRecordsListWithEachStudyDuration = [];
   studyRecordsList.forEach((item) => {
-    const { subject_id, end_time, start_time } = item;
+    const { subject_id, end_time, start_time, real_study_time } = item;
     const duration = end_time.seconds - start_time.seconds;
+    const real_dura = real_study_time;
     const isItemExist = StudyRecordsListWithEachStudyDuration.find(
       (item) => item.subject_id === subject_id
     );
     if (isItemExist) {
       isItemExist.duration += duration;
+      isItemExist.real_dura += real_dura;
     } else {
-      StudyRecordsListWithEachStudyDuration.push({ subject_id, duration });
+      StudyRecordsListWithEachStudyDuration.push({
+        subject_id,
+        duration,
+        real_dura,
+      });
     }
   });
   await console.log(
@@ -182,9 +188,9 @@ async function getStudyRecordsOfUserXIncludeSubjectName(uid, fromA, toB) {
   });
   await console.log("subjectsList", subjectsList);
 
-  // 4. 과목id, 공부시간, 과목이름이 들어있는 리스트 만듬: {subject_id: ㅁㅁ, duration: ㅁㅁ, subject_name: ㅁㅁ}
+  // 4. 과목id, 공부시간, 과목이름이 들어있는 리스트 만듬: {subject_id: ㅁㅁ, duration: ㅁㅁ, real_dura: ㅁㅁ, subject_name: ㅁㅁ}
   const mergedArray = StudyRecordsListWithEachStudyDuration.map((item) => {
-    const { subject_id, duration } = item;
+    const { subject_id, duration, real_dura } = item;
     const matchingItem = subjectsList.find(
       (item) => item.subject_id === subject_id
     );
@@ -193,6 +199,7 @@ async function getStudyRecordsOfUserXIncludeSubjectName(uid, fromA, toB) {
     return {
       subject_id,
       duration,
+      real_dura,
       subject_name,
     };
   });
