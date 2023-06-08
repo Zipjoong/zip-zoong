@@ -18,6 +18,7 @@ import {
   HStack,
   IconButton,
   Checkbox,
+  Flex,
 } from "@chakra-ui/react";
 import { MdDelete, MdAddCircle } from "react-icons/md";
 import { fireStore } from "../firbase";
@@ -174,9 +175,10 @@ export default function TodoListPage() {
     >
       <Box>
         <Text fontSize={"5xl"} as={"b"}>
-          Total StudyTime : {formatTime(sum)}
+          누적 공부시간 : {formatTime(sum)}
         </Text>
       </Box>
+
       <Box
         my={"5"}
         bg={"blue.50"}
@@ -191,8 +193,8 @@ export default function TodoListPage() {
           borderBottomWidth={2}
           borderBottomColor={"blackAlpha.300"}
         >
-          <Text mb="1" as={"b"} fontSize={"xl"}>
-            Add Subject
+          <Text mb="1" as={"b"} fontSize={"xl"} paddingRight={"20"}>
+            과목 추가
           </Text>
           <Box>
             <IconButton
@@ -247,19 +249,19 @@ export default function TodoListPage() {
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Add Subject</ModalHeader>
+          <ModalHeader>공부 과목 추가</ModalHeader>
           <ModalBody>
             <Input
               value={newSubjectTitle}
               onChange={(e) => setNewSubjectTitle(e.target.value)}
-              placeholder="Subject title"
+              placeholder="과목명을 입력해주세요."
             />
           </ModalBody>
           <ModalFooter>
             <Button colorScheme="blue" mr={3} onClick={handleAddSubject}>
-              Add
+              추가
             </Button>
-            <Button onClick={() => setIsModalOpen(false)}>Cancel</Button>
+            <Button onClick={() => setIsModalOpen(false)}>취소</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -371,7 +373,13 @@ const TodoItem = ({ todo, handleDeleteTodo }) => {
           defaultChecked={todo.completed}
           onChange={handleToggleComplete}
         />
-        <Text>{todo.title}</Text>
+        {!todo.completed ? (
+          <Text>{todo.title}</Text>
+        ) : (
+          <Text as={"s"} color={"blackAlpha.300"}>
+            {todo.title}
+          </Text>
+        )}
         <Box>
           <IconButton
             colorScheme="red"
