@@ -89,19 +89,20 @@ export default function Test() {
         py={"5"}
         px={"40"}
         borderBottomWidth={1}
+        bg={"blue.200"}
         shadow={"dark-lg"}
       >
-        <Box as="button" color={"blue.500"} onClick={() => nav("/landing")}>
+        <Box color={"blue.800"}>
           <RiCameraLensLine size={"48"} />
         </Box>
 
-        <Text fontSize={"6xl"}>
+        <Text color={"blue.600"} fontSize={"6xl"}>
           ZipZoong
           {/* <Outlet/> */}
         </Text>
 
         <HStack spacing={2}>
-          {/* <Button color={"green.500"} onClick={modal1.onOpen}>
+          {/* <Button color={"blue.500"} onClick={modal1.onOpen}>
             Sign up
           </Button> */}
           {user ? (
@@ -109,7 +110,7 @@ export default function Test() {
               Log out
             </Button>
           ) : (
-            // <Button colorScheme={"green"} onClick={modal2.onOpen}>
+            // <Button colorScheme={"blue"} onClick={modal2.onOpen}>
             //   Log in
             // </Button>
             <Box></Box>
@@ -171,11 +172,13 @@ export default function Test() {
         </Modal>
       </HStack>
 
-      {/* <Box bg={"orange.100"}>
+      {/* <Box bg={"blue.100"}>
         <NewHoli />
       </Box> */}
 
-      <Box>{user ? <Outlet /> : <CallToActionWithAnnotation />}</Box>
+      <Box bg={"blue.100"}>
+        {user ? <Outlet /> : <CallToActionWithAnnotation />}
+      </Box>
     </Box>
   );
 }
@@ -319,7 +322,7 @@ export function CallToActionWithAnnotation() {
             lineHeight={"110%"}
           >
             Make money from <br />
-            <Text as={"span"} color={"green.400"}>
+            <Text as={"span"} color={"blue.400"}>
               your audience
             </Text>
           </Heading>
@@ -337,24 +340,24 @@ export function CallToActionWithAnnotation() {
           >
             <Button
               onClick={modal2.onOpen}
-              colorScheme={"green"}
-              bg={"green.400"}
+              colorScheme={"blue"}
+              bg={"blue.400"}
               rounded={"full"}
               px={6}
               _hover={{
-                bg: "green.500",
+                bg: "blue.500",
               }}
             >
               Log in
             </Button>
             <Button
               onClick={modal1.onOpen}
-              colorScheme={"green"}
-              bg={"green.400"}
+              colorScheme={"blue"}
+              bg={"blue.400"}
               rounded={"full"}
               px={6}
               _hover={{
-                bg: "green.500",
+                bg: "blue.500",
               }}
             >
               Sign up

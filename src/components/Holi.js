@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Webcam from "react-webcam";
 import { Holistic } from "@mediapipe/holistic";
 import * as cam from "@mediapipe/camera_utils";
-import { Box, Button, VStack, Text, useToast } from "@chakra-ui/react";
+import { Box, Button, VStack, Text, useToast, HStack } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import {
   collection,
@@ -92,9 +92,9 @@ function NewHoli({ subjecttitle, docid }) {
 
     reyeEAR = (rp26 + rp35) / (2 * rp14);
 
-    console.log(reyeEAR, "HELLLO!@", Date.now(), Date());
+    //console.log(reyeEAR, "HELLLO!@", Date.now(), Date());
     if (reyeEAR < 0.2) {
-      console.log("CLLLLLLLLLOOOOOOOOOOSE");
+      //console.log("CLLLLLLLLLOOOOOOOOOOSE");
       setEarRight(true);
     } else {
       setEarRight(false);
@@ -301,18 +301,38 @@ function NewHoli({ subjecttitle, docid }) {
   return (
     <VStack>
       <Box>
-        <Webcam ref={webcamRef} mirrored={true} />
-        <Text>Elapsed Time: {formatTime(time)}</Text>
-
-        <Button onClick={handleStart}>Start</Button>
-        <Button onClick={handlePause}>Pause</Button>
-        <Button onClick={handleReset}>Reset</Button>
-        <Link to="/todo">
-          <Button onClick={handleButtonClick}>Go Back to Todo List Page</Button>
-        </Link>
+        <Text fontSize={"6xl"} as={"b"}>
+          {subjecttitle}
+        </Text>
+      </Box>
+      <Box alignContent={"center"}>
+        <Text fontSize={"4xl"} as={"b"}>
+          측정시간: {formatTime(time)}
+        </Text>
       </Box>
       <Box>
-        <Text>{subjecttitle}</Text>
+        <Webcam ref={webcamRef} mirrored={true} />
+      </Box>
+      <HStack padding={"3"}>
+        <Button onClick={handleStart} colorScheme="blue">
+          Start
+        </Button>
+        <Button onClick={handlePause} colorScheme="blue">
+          Pause
+        </Button>
+        <Button onClick={handleReset}>Reset</Button>
+      </HStack>
+      <Box>
+        <Link to="/todo">
+          <Button
+            onClick={handleButtonClick}
+            size="lg"
+            colorScheme="blue"
+            variant="solid"
+          >
+            Go Back to Todo List Page
+          </Button>
+        </Link>
       </Box>
     </VStack>
   );
