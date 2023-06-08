@@ -1,6 +1,7 @@
 //react & chakra-ui
 import React, { useEffect, useState } from "react";
-import { Box, Text } from "@chakra-ui/react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Box, Button, Text } from "@chakra-ui/react";
 //chart library
 import { ResponsivePie } from "@nivo/pie";
 // to do: chart library import
@@ -9,7 +10,22 @@ import { getAuth } from "firebase/auth";
 //firebase
 import { getStudyRecordsOfUserXIncludeSubjectName } from "./Firebase";
 
+function remainOnlyDate(date_time) {
+  date_time.setHours(0, 0, 0, 0);
+  console.log("0000으로 세팅함", date_time);
+  var nextDate = new Date(date_time);
+  nextDate = nextDate.setDate(date_time.getDate() + 1);
+  nextDate = new Date(nextDate);
+  console.log("nextDAte", nextDate);
+  const dateOnly1 = date_time.toISOString().split("T")[0];
+  const dateOnly2 = nextDate.toISOString().split("T")[0];
+
+  console.log("?????????????", dateOnly1, dateOnly2);
+  return [dateOnly1, dateOnly2];
+}
+
 function MyChart() {
+  console.log("컴포넌트 로드됨");
   const [studyRecordsState, setStudyRecordsState] = useState([
     {
       id: "ruby",
@@ -42,15 +58,28 @@ function MyChart() {
       color: "hsl(325, 70%, 50%)",
     },
   ]);
+  const [calData, setCalData] = useState(null);
 
   const auth = getAuth();
   const user = auth.currentUser;
 
+  const location = useLocation();
+  const data = location.state?.data;
+  console.log("들고온 데이터", data);
+
+  const asdf = remainOnlyDate(data.start);
+
+  const navigate = useNavigate();
+  function goBackToCalendar() {
+    navigate("/calendar");
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       await console.log("-------- useEffect start :)");
+      await console.log("!!!!!!!!!!!!!!!!", asdf[0], asdf[1]);
       const studyRecordsListFromFirebase =
-        await getStudyRecordsOfUserXIncludeSubjectName("0");
+        await getStudyRecordsOfUserXIncludeSubjectName("0", asdf[0], asdf[1]);
       await console.log(
         "studyRecordsFromFirebase",
         studyRecordsListFromFirebase
@@ -129,6 +158,9 @@ function MyChart() {
           }}
           legends={[]}
         />
+      </Box>
+      <Box>
+        <Button onClick={goBackToCalendar}>캘린더로 돌아가기</Button>
       </Box>
     </Box>
   );

@@ -1,5 +1,5 @@
 //react & chakra-ui
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Box } from "@chakra-ui/react";
 //calendar library
 import { Calendar, momentLocalizer } from "react-big-calendar";
@@ -7,6 +7,9 @@ import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 //firebase
 import { getStudyRecordsOfUserXForCalendar } from "./Firebase";
+import { useNavigate } from "react-router-dom";
+
+const palette = ["rgba(0,0,255,2)", "rgba(0,0,255,1)", "rgba(0,0,255,0.2)"];
 
 function convertFirebaseDataToCalendarData(studyRecordsForEachSubject) {
   const calEvents = [];
@@ -15,19 +18,37 @@ function convertFirebaseDataToCalendarData(studyRecordsForEachSubject) {
     const studyDuration =
       studyRecordsForEachSubject[i].end_time.seconds -
       studyRecordsForEachSubject[i].start_time.seconds;
+    // const seletedColor =
+    //   palette[studyRecordsForEachSubject[i].subject_id % palette.length];
+    const a = studyDuration / 60 / 150;
+    const seletedColor = "rgba(0,0,255," + a + ")";
     calEvents.push({
       title:
         studyRecordsForEachSubject[i].subject_name +
         " " +
         studyDuration / 60 +
-        "분 공부",
+        "분",
       start: new Date(studyRecordsForEachSubject[i].start_time.seconds * 1000),
       end: new Date(studyRecordsForEachSubject[i].end_time.seconds * 1000),
+      color: seletedColor,
     });
   }
 
   return calEvents;
 }
+
+const eventStyleGetter = (event) => {
+  const style = {
+    backgroundColor: event.color, // 이벤트 색상을 배경색으로 지정
+    color: "white", // 텍스트 색상
+    borderRadius: "5px",
+    border: "none",
+    display: "block",
+  };
+  return {
+    style: style,
+  };
+};
 
 function MyCalendar() {
   const [studyRecordsState, setStudyRecordsState] = useState([
@@ -39,6 +60,12 @@ function MyCalendar() {
       pk: "1",
     },
   ]);
+
+  const navigate = useNavigate();
+  const moveToChart = (calEvent) => {
+    console.log("클릭한 캘린더 이벤트", calEvent);
+    navigate("/chart", { state: { data: calEvent } });
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -76,6 +103,8 @@ function MyCalendar() {
         startAccessor="start"
         endAccessor="end"
         style={{ height: 800, margin: "50px" }}
+        onSelectEvent={moveToChart}
+        eventPropGetter={eventStyleGetter}
       />
     </Box>
   );

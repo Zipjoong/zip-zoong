@@ -114,20 +114,33 @@ async function getStudyRecordsOfUserXForCalendar(uid) {
 
   return mergedArray;
 }
+function convertToUTC(koreaTime) {
+  const date = new Date(koreaTime);
+  const utcTime = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+  return utcTime.toISOString();
+}
 
-async function getStudyRecordsOfUserXIncludeSubjectName(uid) {
+async function getStudyRecordsOfUserXIncludeSubjectName(uid, fromA, toB) {
   // 1. uid 에 해당하는 공부기록들을 모두 찾음
   const studyRecordsQuery = query(
     collection(db, "STUDY_RECORDS"),
     where("user_id", "==", uid)
   );
-  const studyRecordsQuerySnapshot = await getDocs(studyRecordsQuery);
+  // todo: 1-1. 원하는 날짜로 공부기록들 필터링
+  const fromNow = convertToUTC(fromA);
+  const query2 = query(
+    studyRecordsQuery,
+    where("start_time", ">=", new Date(fromNow))
+  );
+  const query3 = query(query2, where("start_time", "<=", new Date(toB)));
+  const studyRecordsQuerySnapshot = await getDocs(query3);
 
   // 리스트에 저장하는 방법1
   // const rawData_studyRecords = [];
   // studyRecordsQuerySnapshot.forEach((doc) => {
   //   rawData_studyRecords.push(doc.data());
   // });
+
   // 리스트에 저장하는 방법2
   const studyRecordsList = studyRecordsQuerySnapshot.docs.map((doc) =>
     doc.data()
@@ -184,6 +197,8 @@ async function getStudyRecordsOfUserXIncludeSubjectName(uid) {
 
   return mergedArray;
 }
+
+async function joinAandB(A, B, A_id, B_id) {}
 
 async function writeUsers(db) {
   // try {
