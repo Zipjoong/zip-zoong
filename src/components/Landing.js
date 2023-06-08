@@ -6,11 +6,10 @@ export default function Landing() {
   return (
     // <Center>
     <Box>
-      <Grid py={10} px={40} columnGap={10} templateColumns={"repeat(3,1fr)"}>
+      <Grid py={5} px={5} columnGap={10} templateColumns={"repeat(3,1fr)"}>
         <Card
           align="center"
           variant={"filled"}
-          padding={10}
           shadow={"dark-lg"}
           bg={"gray.200"}
         >
@@ -24,19 +23,13 @@ export default function Landing() {
           </CardBody>
           <CardFooter>
             <Link to="/todo">
-              <Button align="center" shadow={"xl"} colorScheme="green">
+              <Button align="center" shadow={"xl"} colorScheme="blue">
                 Start
               </Button>
             </Link>
           </CardFooter>
         </Card>
-        <Card
-          align="center"
-          variant={"filled"}
-          padding={10}
-          shadow={"dark-lg"}
-          bg={"gray.200"}
-        >
+        <Card align="center" variant={"filled"} shadow={"dark-lg"}>
           <CardHeader>
             <Heading size="lg"> CamStudy</Heading>
           </CardHeader>
@@ -45,7 +38,7 @@ export default function Landing() {
           </CardBody>
           <CardFooter align="center">
             <Link to="/cam-study">
-              <Button align="center" shadow={"xl"} colorScheme="green">
+              <Button align="center" shadow={"xl"} colorScheme="blue">
                 Start
               </Button>
             </Link>
@@ -54,7 +47,6 @@ export default function Landing() {
         <Card
           align="center"
           variant={"filled"}
-          padding={10}
           shadow={"dark-lg"}
           bg={"gray.200"}
         >
@@ -66,7 +58,7 @@ export default function Landing() {
           </CardBody>
           <CardFooter>
             <Link to="/calendar">
-              <Button align="center" shadow={"xl"} colorScheme="green">
+              <Button align="center" shadow={"xl"} colorScheme="blue">
                 Start
               </Button>
             </Link>

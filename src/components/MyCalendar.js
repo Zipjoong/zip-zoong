@@ -27,8 +27,9 @@ function convertFirebaseDataToCalendarData(studyRecordsForEachSubject) {
       title:
         studyRecordsForEachSubject[i].subject_name +
         " " +
-        studyDuration / 60 +
-        "분",
+        Math.floor(studyDuration / 60) +
+        ":" +
+        (studyDuration % 60),
       start: new Date(studyRecordsForEachSubject[i].start_time.seconds * 1000),
       end: new Date(studyRecordsForEachSubject[i].end_time.seconds * 1000),
       color: seletedColor,

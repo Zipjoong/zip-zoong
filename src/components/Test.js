@@ -89,14 +89,13 @@ export default function Test() {
         py={"5"}
         px={"40"}
         borderBottomWidth={1}
-        bg={"orange.200"}
         shadow={"dark-lg"}
       >
-        <Box color={"green.500"}>
+        <Box as="button" color={"blue.500"} onClick={() => nav("/landing")}>
           <RiCameraLensLine size={"48"} />
         </Box>
 
-        <Text color={"yellow.500"} fontSize={"6xl"}>
+        <Text fontSize={"6xl"}>
           ZipZoong
           {/* <Outlet/> */}
         </Text>
@@ -106,7 +105,7 @@ export default function Test() {
             Sign up
           </Button> */}
           {user ? (
-            <Button colorScheme={"green"} onClick={logout}>
+            <Button colorScheme={"blue"} onClick={logout}>
               Log out
             </Button>
           ) : (
@@ -176,9 +175,7 @@ export default function Test() {
         <NewHoli />
       </Box> */}
 
-      <Box bg={"orange.100"}>
-        {user ? <Outlet /> : <CallToActionWithAnnotation />}
-      </Box>
+      <Box>{user ? <Outlet /> : <CallToActionWithAnnotation />}</Box>
     </Box>
   );
 }

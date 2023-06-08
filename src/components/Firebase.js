@@ -7,6 +7,8 @@ import {
   getDocs,
 } from "firebase/firestore";
 
+const SUBJECTS_TABLE_NAME = "STUDY_SUBJECTS";
+
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
   authDomain: process.env.REACT_APP_AUTH_DOMAIN,
@@ -80,10 +82,9 @@ async function getStudyRecordsOfUserXForCalendar(uid) {
   await console.log("studyRecordsList", studyRecordsList);
 
   // 3. uid 에 해당하는 과목들 불러오기
-  const subjectsRef = collection(db, "STUDY_SUBJECTS_TEST");
+  const subjectsRef = collection(db, SUBJECTS_TABLE_NAME);
   const subjectsQuery = query(subjectsRef, where("user_id", "==", uid));
   const subjectsQuerySnapshot = await getDocs(subjectsQuery);
-
   const subjectsList = [];
   await subjectsQuerySnapshot.forEach((doc) => {
     const newSubjectsObject = doc.data();
@@ -114,6 +115,7 @@ async function getStudyRecordsOfUserXForCalendar(uid) {
 
   return mergedArray;
 }
+
 function convertToUTC(koreaTime) {
   const date = new Date(koreaTime);
   const utcTime = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
@@ -167,7 +169,7 @@ async function getStudyRecordsOfUserXIncludeSubjectName(uid, fromA, toB) {
   );
 
   // 3. uid 에 해당하는 과목들 불러오기
-  const subjectsRef = collection(db, "STUDY_SUBJECTS_TEST");
+  const subjectsRef = collection(db, SUBJECTS_TABLE_NAME);
   const subjectsQuery = query(subjectsRef, where("user_id", "==", uid));
   const subjectsQuerySnapshot = await getDocs(subjectsQuery);
 

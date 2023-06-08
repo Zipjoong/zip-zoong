@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Webcam from "react-webcam";
 import { Holistic } from "@mediapipe/holistic";
 import * as cam from "@mediapipe/camera_utils";
-import { Box, Button, VStack, Text } from "@chakra-ui/react";
+import { Box, Button, VStack, Text, useToast } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import {
   collection,
@@ -61,9 +61,14 @@ function NewHoli({ subjecttitle, docid }) {
 
   //for 거북목
   var goodLengthList = [];
-  var isTurtleDetected = false;
+  var isSetted = false;
+  var faceHorizonLength = -1;
   const audio = new Audio("/sound/sound_ex.wav");
-  ////
+  //
+  var faceHorizonLengthList = [];
+
+  const toast = useToast();
+  ////end for 거북목
 
   function eyeclosed(results, videox, videoy) {
     let rp26;
@@ -105,23 +110,63 @@ function NewHoli({ subjecttitle, docid }) {
     }
 
     setFaceDetected(results["faceLandmarks"] === undefined ? true : false);
-    if (isTurtleDetected == false) {
+
+    // 거북이 시작
+
+    var nowFaceLength;
+    if (results.faceLandmarks) {
+      nowFaceLength = calculateDistance(
+        results.faceLandmarks[33].x * videoWidth,
+        results.faceLandmarks[33].y * videoHeight,
+        results.faceLandmarks[263].x * videoWidth,
+        results.faceLandmarks[263].y * videoHeight
+      );
+    }
+
+    if (isSetted == false) {
+      if (!toast.isActive("camera-in-setting-toast"))
+        toast({
+          id: "camera-in-setting-toast",
+          isClosable: true,
+          position: "top-left",
+          duration: 1000,
+          render: () => (
+            <Box color="white" p={3} bg="blue.500">
+              카메라 세팅중
+            </Box>
+          ),
+        });
       const v = turtleDetection(results, {
         width: videoWidth,
         height: videoHeight,
       });
       if (v != -1) {
         goodLengthList.push(v);
+        faceHorizonLengthList.push(nowFaceLength);
         console.log("값 넣음", goodLengthList.length);
       }
       if (goodLengthList.length >= 60) {
         // goodLengthList 정리
         console.log("60!");
         goodLengthList = goodLengthList.slice(10);
-        isTurtleDetected = true;
+        faceHorizonLengthList = faceHorizonLengthList.slice(10);
+        isSetted = true;
+        if (!toast.isActive("camera-setted-toast"))
+          toast({
+            id: "camera-setted-toast",
+            duration: 1000,
+            isClosable: true,
+            position: "top-left",
+            status: "success",
+            title: "카메라 세팅완료",
+            // render: () => (
+            //   <Box color="white" p={3} bg="green.500">
+            //     카메라 세팅완료
+            //   </Box>
+            // ),
+          });
       }
     } else {
-      // console.log("now.. just run");
       const v = turtleDetection(results, {
         width: videoWidth,
         height: videoHeight,
@@ -132,8 +177,24 @@ function NewHoli({ subjecttitle, docid }) {
         0
       );
       let average = sum / goodLengthList.length;
+      let sum2 = faceHorizonLengthList.reduce(
+        (acc, currentValue) => acc + currentValue,
+        0
+      );
+      let average2 = sum2 / goodLengthList.length;
 
-      if (v < average * 0.93) {
+      console.log("average2", average2);
+      console.log("현재 얼굴 가로 길이:", nowFaceLength);
+      if (v < average * 0.93 && average2 * 1.1 <= nowFaceLength) {
+        if (!toast.isActive("turtle-toast"))
+          toast({
+            id: "turtle-toast",
+            title: "※거북목 경고",
+            description: "자세를 바르게 해주세요!",
+            status: "warning",
+            duration: 1000,
+            isClosable: true,
+          });
         console.log("거북목입니당");
         audio.play();
       } else {
@@ -141,6 +202,13 @@ function NewHoli({ subjecttitle, docid }) {
         audio.pause();
       }
     }
+  }
+
+  function calculateDistance(x1, y1, x2, y2) {
+    const deltaX = x2 - x1;
+    const deltaY = y2 - y1;
+    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    return distance;
   }
 
   useEffect(() => {
@@ -233,7 +301,7 @@ function NewHoli({ subjecttitle, docid }) {
   return (
     <VStack>
       <Box>
-        <Webcam ref={webcamRef} />
+        <Webcam ref={webcamRef} mirrored={true} />
         <Text>Elapsed Time: {formatTime(time)}</Text>
 
         <Button onClick={handleStart}>Start</Button>
