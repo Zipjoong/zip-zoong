@@ -321,15 +321,15 @@ export function CallToActionWithAnnotation() {
             fontSize={{ base: "2xl", sm: "4xl", md: "6xl" }}
             lineHeight={"110%"}
           >
-            Make money from <br />
+            ZipZoong과 함께하는 <br />
             <Text as={"span"} color={"blue.400"}>
-              your audience
+              공부시간 측정
             </Text>
           </Heading>
           <Text color={"gray.500"}>
-            Monetize your content by charging your most loyal readers and reward
-            them loyalty points. Give back to your loyal readers by granting
-            them access to your pre-releases and sneak-peaks.
+            FaceMesh를 활용하여 사용자의 자리비움, 눈감음, 거북목 알림 기능을
+            제공합니다. Todolist와 Chart,Calendar를 통해 공부한 기록을
+            확인해보세요!
           </Text>
           <Stack
             direction={"column"}
