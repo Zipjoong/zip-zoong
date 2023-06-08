@@ -65,7 +65,7 @@ export default function Landing() {
             <Text>TBD</Text>
           </CardBody>
           <CardFooter>
-            <Link to="/chart">
+            <Link to="/calendar">
               <Button align="center" shadow={"xl"} colorScheme="green">
                 Start
               </Button>

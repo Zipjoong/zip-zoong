@@ -8,6 +8,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 //firebase
 import { getStudyRecordsOfUserXForCalendar } from "./Firebase";
 import { useNavigate } from "react-router-dom";
+import { getAuth } from "@firebase/auth";
 
 const palette = ["rgba(0,0,255,2)", "rgba(0,0,255,1)", "rgba(0,0,255,0.2)"];
 
@@ -21,7 +22,7 @@ function convertFirebaseDataToCalendarData(studyRecordsForEachSubject) {
     // const seletedColor =
     //   palette[studyRecordsForEachSubject[i].subject_id % palette.length];
     const a = studyDuration / 60 / 150;
-    const seletedColor = "rgba(0,0,255," + a + ")";
+    const seletedColor = "rgba(0,0,255," + 1 + ")";
     calEvents.push({
       title:
         studyRecordsForEachSubject[i].subject_name +
@@ -71,8 +72,11 @@ function MyCalendar() {
     const fetchData = async () => {
       await console.log("-------- useEffect start :)");
 
+      //auth 먼저하고 calendar 값들 불러오기
+      const auth = getAuth();
+      const user = auth.currentUser;
       const studyRecordsFromFirebase = await getStudyRecordsOfUserXForCalendar(
-        "0"
+        user.uid
       );
       await console.log(
         "studyRecordsListFromFirebase",

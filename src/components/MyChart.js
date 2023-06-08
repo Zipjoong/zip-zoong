@@ -60,9 +60,6 @@ function MyChart() {
   ]);
   const [calData, setCalData] = useState(null);
 
-  const auth = getAuth();
-  const user = auth.currentUser;
-
   const location = useLocation();
   const data = location.state?.data;
   console.log("들고온 데이터", data);
@@ -76,10 +73,16 @@ function MyChart() {
 
   useEffect(() => {
     const fetchData = async () => {
+      const auth = getAuth();
+      const user = auth.currentUser;
       await console.log("-------- useEffect start :)");
       await console.log("!!!!!!!!!!!!!!!!", asdf[0], asdf[1]);
       const studyRecordsListFromFirebase =
-        await getStudyRecordsOfUserXIncludeSubjectName("0", asdf[0], asdf[1]);
+        await getStudyRecordsOfUserXIncludeSubjectName(
+          user.uid,
+          asdf[0],
+          asdf[1]
+        );
       await console.log(
         "studyRecordsFromFirebase",
         studyRecordsListFromFirebase
