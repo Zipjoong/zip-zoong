@@ -35,33 +35,13 @@ export default function FaceMeshPage({ title }) {
   let noFaceDetected;
   const navigate = useNavigate();
 
-  const handleGoBack = () => {
-    setLoaded(false);
-
-    // WebGL 컨텍스트 해제
-    if (reqID) {
-      cancelAnimationFrame(reqID);
-      setreqID(null); // requestId 초기화
-    }
-
-    const gl = canvasRef.current.getContext("webgl");
-    if (gl) {
-      gl.getExtension("WEBGL_lose_context").loseContext();
-      canvasRef.current.getContext("webgl", { preserveDrawingBuffer: true });
-      canvasRef.current.getContext("webgl", { preserveDrawingBuffer: false });
-    }
-
-    // 페이지 이동
-    navigate("/landing"); // 이동하고자 하는 경로로 수정해주세요
-  };
-
   console.log(reqID, "tHiSTisi");
 
-  const timef = (tt) => {
-    console.log(tt, "hello");
-    setlisttime(tt);
-    console.log(listtime, "asdfasdf");
-  };
+  // const timef = (tt) => {
+  //   console.log(tt, "hello");
+  //   setlisttime(tt);
+  //   console.log(listtime, "asdfasdf");
+  // };
 
   const runDetector = async (video, canvas) => {
     const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
@@ -144,7 +124,7 @@ export default function FaceMeshPage({ title }) {
     <VStack>
       <Box>
         <Stopwatch
-          timef={timef}
+          // timef={timef}
           tisRunning={!FaceDetected}
           subtitle={Subjecttitle}
         />
@@ -178,10 +158,7 @@ export default function FaceMeshPage({ title }) {
       </Box>
 
       <Box>
-        <Button onClick={() => handleGoBack()}>
-          {" "}
-          TTTTTTTTTTTTTTTTtTodoListPage
-        </Button>
+        <Button> TTTTTTTTTTTTTTTTtTodoListPage</Button>
       </Box>
     </VStack>
   );
