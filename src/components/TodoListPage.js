@@ -57,9 +57,9 @@ export default function TodoListPage() {
   const [dura, setDura] = useState();
   const [sum, setSum] = useState();
   const [deltoggle, setDelToggle] = useState(false);
+  console.log(Date(), "DATE");
 
   const navigate = useNavigate();
-
   const auth = getAuth();
   const user = auth.currentUser;
 
@@ -93,11 +93,20 @@ export default function TodoListPage() {
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const groups = {};
       snapshot.forEach((doc) => {
-        const { subject_id, real_study_time } = doc.data();
-        if (!groups[subject_id]) {
-          groups[subject_id] = 0;
+        const { subject_id, real_study_time, start_time } = doc.data();
+        if (start_time) {
+          const st = new Date(start_time.seconds * 1000).getDate();
+          const nt = new Date().getDate();
+          if (st === nt) {
+            if (!groups[subject_id]) {
+              groups[subject_id] = 0;
+            }
+            groups[subject_id] += real_study_time;
+          }
         }
-        groups[subject_id] += real_study_time;
+
+        // console.log(new Date(start_time.seconds * 1000).getDate(), "d");
+        // console.log(new Date().getDate(), "HERERERER");
       });
       console.log(groups, "===================");
       // 집계된 그룹의 start_time 값을 합산

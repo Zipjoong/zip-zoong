@@ -12,8 +12,8 @@ import { getStudyRecordsOfUserXIncludeSubjectName } from "./Firebase";
 
 function remainOnlyDate(start_date_time) {
   start_date_time.setHours(0, 0, 0, 0);
-  start_date_time = new Date();
-  start_date_time.setDate(start_date_time.getDate());
+  start_date_time = new Date(start_date_time);
+  start_date_time.setDate(start_date_time.getDate() + 1);
   console.log("@@@@@@@@@@@@@@@@@@@@@@@", start_date_time);
   var nextDate = new Date();
   nextDate.setDate(start_date_time.getDate() + 1);

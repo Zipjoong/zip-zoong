@@ -265,6 +265,7 @@ export function CallToActionWithAnnotation() {
       console.log(curUserInfo);
       setUser(curUserInfo.user);
       modal2.onClose();
+      console.log(Date(), "dTTTTT");
 
       nav("/landing");
     } catch (err) {
