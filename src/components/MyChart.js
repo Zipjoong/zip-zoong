@@ -1,7 +1,22 @@
 //react & chakra-ui
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Box, Button, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Text,
+  Stack,
+  Container,
+  SimpleGrid,
+  Image,
+  Flex,
+  Heading,
+  StackDivider,
+  Icon,
+  useColorModeValue,
+  VStack,
+  HStack,
+} from "@chakra-ui/react";
 //chart library
 import { ResponsivePie } from "@nivo/pie";
 // to do: chart library import
@@ -133,8 +148,14 @@ function MyChart() {
 
   return (
     <Box>
+      <Box>
+        <Text fontSize={"6xl"}>
+          하루 동안 공부한 과목들의 누적 시간들을 살펴보세요!
+        </Text>
+      </Box>
       <Box height={500}>
         <ResponsivePie
+          height={500}
           layers={[
             "arcLinkLabels",
             "arcs",
