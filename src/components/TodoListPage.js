@@ -55,6 +55,7 @@ export default function TodoListPage() {
   const [newSubjectTitle, setNewSubjectTitle] = useState("");
   const [dura, setDura] = useState();
   const [sum, setSum] = useState();
+  const [deltoggle, setDelToggle] = useState(false);
 
   const navigate = useNavigate();
 
@@ -64,8 +65,10 @@ export default function TodoListPage() {
   useEffect(() => {
     const q = query(
       collection(fireStore, "STUDY_SUBJECTS"),
-      where("user_id", "==", user.uid)
+      where("user_id", "==", user.uid),
+      where("is_del", "==", false)
     );
+
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const subjectsData = snapshot.docs.map((doc) => ({
         id: doc.id,
@@ -139,6 +142,7 @@ export default function TodoListPage() {
     const newSubject = {
       subject_name: newSubjectTitle,
       user_id: user.uid,
+      is_del: false,
     };
 
     addDoc(collection(fireStore, "STUDY_SUBJECTS"), newSubject)
@@ -152,9 +156,14 @@ export default function TodoListPage() {
   };
 
   const handleDeleteSubject = (subjectId) => {
-    deleteDoc(doc(fireStore, "STUDY_SUBJECTS", subjectId)).catch((error) => {
-      console.error("Error deleting document: ", error);
+    //console.log(subjectId.is_del);
+    updateDoc(doc(fireStore, "STUDY_SUBJECTS", subjectId), {
+      is_del: !deltoggle,
+    }).catch((error) => {
+      console.error("Error updating document: ", error);
     });
+
+    console.log(!deltoggle, "sdfsdffsdsfdfsdvsd");
   };
 
   return (
