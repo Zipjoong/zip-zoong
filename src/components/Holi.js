@@ -29,6 +29,7 @@ function NewHoli({ subjecttitle, docid }) {
   const [FaceDetected, setFaceDetected] = useState(false);
   const [isRunning, setIsRunning] = useState(true); // 처음 부터 타이머 시작할거면 초기값 true로 변경 ㅍ필요
   const [time, setTime] = useState(0);
+  const [earRight, setEarRight] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
 
   // console.log(subjecttitle, "from testdetailpage");
@@ -55,7 +56,13 @@ function NewHoli({ subjecttitle, docid }) {
 
     reyeEAR = (rp26 + rp35) / (2 * rp14);
 
-    console.log(reyeEAR, "HELLLO!@");
+    console.log(reyeEAR, "HELLLO!@", Date.now(), Date());
+    if (reyeEAR < 0.2) {
+      console.log("CLLLLLLLLLOOOOOOOOOOSE");
+      setEarRight(true);
+    } else {
+      setEarRight(false);
+    }
   }
 
   function onResultsHolistic(results) {
@@ -131,7 +138,7 @@ function NewHoli({ subjecttitle, docid }) {
     console.log(isRunning);
     console.log(!FaceDetected, "aFace");
 
-    if (isRunning && !FaceDetected) {
+    if (isRunning && !FaceDetected && !earRight) {
       interval = setInterval(() => {
         setTime((prevTime) => prevTime + 1);
       }, 1000);
@@ -141,7 +148,7 @@ function NewHoli({ subjecttitle, docid }) {
     return () => {
       clearInterval(interval);
     };
-  }, [isRunning, FaceDetected]);
+  }, [isRunning, FaceDetected, earRight]);
 
   const handleStart = () => {
     setIsRunning(true);

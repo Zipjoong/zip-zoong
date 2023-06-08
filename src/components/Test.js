@@ -72,9 +72,11 @@ export default function Test() {
 
   const logout = () => {
     const auth = getAuth();
-    auth.signOut();
-    setUser();
-    nav("/");
+    auth.signOut().then(() => {
+      nav("/");
+      setUser();
+      console.log(auth.currentUser);
+    });
   };
   const auth = getAuth();
   const user = auth.currentUser;
