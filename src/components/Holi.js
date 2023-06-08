@@ -23,6 +23,30 @@ function formatTime(time) {
   return `${hours}:${minutes}:${seconds}`;
 }
 
+function turtleDetection(
+  HolisticDetectionResults,
+  { width: videoWidth, height: videoHeight }
+) {
+  const height = videoHeight;
+  const width = videoWidth;
+
+  const results = HolisticDetectionResults;
+  var chin_to_shoulder_length = null;
+  if (results.faceLandmarks && results.poseLandmarks) {
+    //얼굴이 나와야 실행되는 코드
+    const chin_y = results.faceLandmarks[152].y * height;
+    const left_shoulder_y = results.poseLandmarks[11].y * height;
+    const right_shoulder_y = results.poseLandmarks[12].y * height;
+    const shoulder_y = (left_shoulder_y + right_shoulder_y) / 2;
+    chin_to_shoulder_length = Math.abs(chin_y - shoulder_y);
+    console.log("chin_to_shoulder_length", chin_to_shoulder_length);
+  } else {
+    console.log("no face & shoulder");
+  }
+
+  return chin_to_shoulder_length;
+}
+
 function NewHoli({ subjecttitle, docid }) {
   const webcamRef = useRef(null);
   const cameraRef = useRef(null);
@@ -34,6 +58,13 @@ function NewHoli({ subjecttitle, docid }) {
 
   // console.log(subjecttitle, "from testdetailpage");
   // console.log(docid, "from docid dsds");
+
+  //for 거북목
+  var goodLengthList = [];
+  var isTurtleDetected = false;
+  const audio = new Audio("/sound/sound_ex.wav");
+  ////
+
   function eyeclosed(results, videox, videoy) {
     let rp26;
     let rp35;
@@ -74,6 +105,42 @@ function NewHoli({ subjecttitle, docid }) {
     }
 
     setFaceDetected(results["faceLandmarks"] === undefined ? true : false);
+    if (isTurtleDetected == false) {
+      const v = turtleDetection(results, {
+        width: videoWidth,
+        height: videoHeight,
+      });
+      if (v != -1) {
+        goodLengthList.push(v);
+        console.log("값 넣음", goodLengthList.length);
+      }
+      if (goodLengthList.length >= 60) {
+        // goodLengthList 정리
+        console.log("60!");
+        goodLengthList = goodLengthList.slice(10);
+        isTurtleDetected = true;
+      }
+    } else {
+      // console.log("now.. just run");
+      const v = turtleDetection(results, {
+        width: videoWidth,
+        height: videoHeight,
+      });
+
+      let sum = goodLengthList.reduce(
+        (acc, currentValue) => acc + currentValue,
+        0
+      );
+      let average = sum / goodLengthList.length;
+
+      if (v < average * 0.93) {
+        console.log("거북목입니당");
+        audio.play();
+      } else {
+        console.log("측정시작");
+        audio.pause();
+      }
+    }
   }
 
   useEffect(() => {
