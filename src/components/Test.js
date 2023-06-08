@@ -92,7 +92,7 @@ export default function Test() {
         bg={"blue.200"}
         shadow={"dark-lg"}
       >
-        <Box color={"blue.800"}>
+        <Box as="button" color={"blue.800"} onClick={() => nav("/landing")}>
           <RiCameraLensLine size={"48"} />
         </Box>
 

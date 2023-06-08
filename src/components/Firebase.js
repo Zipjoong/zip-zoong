@@ -96,7 +96,7 @@ async function getStudyRecordsOfUserXForCalendar(uid) {
   // 만들어야 하는 구조
   // {subject_id: ㅁㅁ, start_time: ㅁㅁ, end_time: ㅁㅁ, subject_name: ㅁㅁ}
   const mergedArray = studyRecordsList.map((item) => {
-    const { subject_id, start_time, end_time } = item;
+    const { subject_id, start_time, end_time, real_study_time } = item;
     const isMatchedItemExist = subjectsList.find(
       (item) => item.subject_id === subject_id
     );
@@ -109,6 +109,7 @@ async function getStudyRecordsOfUserXForCalendar(uid) {
       start_time,
       end_time,
       subject_name,
+      real_study_time,
     };
   });
   await console.log("mergedArray", mergedArray);

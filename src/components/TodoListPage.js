@@ -35,14 +35,18 @@ import {
 import { getAuth } from "firebase/auth";
 
 function formatTime(time) {
-  const hours = Math.floor(time / 3600)
-    .toString()
-    .padStart(2, "0");
-  const minutes = Math.floor((time % 3600) / 60)
-    .toString()
-    .padStart(2, "0");
-  const seconds = (time % 60).toString().padStart(2, "0");
-  return `${hours}:${minutes}:${seconds}`;
+  if (!time) {
+    return `00:00:00`;
+  } else {
+    const hours = Math.floor(time / 3600)
+      .toString()
+      .padStart(2, "0");
+    const minutes = Math.floor((time % 3600) / 60)
+      .toString()
+      .padStart(2, "0");
+    const seconds = (time % 60).toString().padStart(2, "0");
+    return `${hours}:${minutes}:${seconds}`;
+  }
 }
 
 export default function TodoListPage() {

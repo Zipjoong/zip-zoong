@@ -16,9 +16,10 @@ function convertFirebaseDataToCalendarData(studyRecordsForEachSubject) {
   const calEvents = [];
   for (var i = 0; i < studyRecordsForEachSubject.length; i++) {
     // console.log("study records i", studyRecordsForEachSubject[i]);
-    const studyDuration =
-      studyRecordsForEachSubject[i].end_time.seconds -
-      studyRecordsForEachSubject[i].start_time.seconds;
+    // const studyDuration =
+    //   studyRecordsForEachSubject[i].end_time.seconds -
+    //   studyRecordsForEachSubject[i].start_time.seconds;
+    const studyDuration = studyRecordsForEachSubject[i].real_study_time;
     // const seletedColor =
     //   palette[studyRecordsForEachSubject[i].subject_id % palette.length];
     const a = studyDuration / 60 / 150;
