@@ -27,8 +27,7 @@ import {
   signInWithEmailAndPassword,
 } from "../firbase";
 import { getAuth, signOut } from "firebase/auth";
-
-import NewHoli from "./Holi";
+import Footer from "./Footer";
 
 //import CallToActionWithAnnotation from "./Main";
 
@@ -179,6 +178,7 @@ export default function Test() {
       <Box bg={"blue.100"}>
         {user ? <Outlet /> : <CallToActionWithAnnotation />}
       </Box>
+      <Footer></Footer>
     </Box>
   );
 }
