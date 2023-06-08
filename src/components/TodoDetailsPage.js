@@ -28,14 +28,6 @@ function TodoDetailsPage() {
         >
           <NewHoli subjecttitle={title} docid={docid} />
         </Box>
-
-        {previousPage === "TodoListPage" && (
-          <Button onClick={goBack}>Go Back to TodoListPage</Button>
-        )}
-
-        <Link to="/face">
-          <Button>Go Back to TTTTTTTTTTTTTTTTtTodoListPage</Button>
-        </Link>
       </Box>
     </VStack>
   );

@@ -34,11 +34,23 @@ import {
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
+function formatTime(time) {
+  const hours = Math.floor(time / 3600)
+    .toString()
+    .padStart(2, "0");
+  const minutes = Math.floor((time % 3600) / 60)
+    .toString()
+    .padStart(2, "0");
+  const seconds = (time % 60).toString().padStart(2, "0");
+  return `${hours}:${minutes}:${seconds}`;
+}
+
 export default function TodoListPage() {
   const [subjects, setSubjects] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newSubjectTitle, setNewSubjectTitle] = useState("");
   const [dura, setDura] = useState();
+  const [sum, setSum] = useState();
 
   const navigate = useNavigate();
 
@@ -81,11 +93,10 @@ export default function TodoListPage() {
       });
       console.log(groups, "===================");
       // 집계된 그룹의 start_time 값을 합산
-      //const totalSum = Object.values(groups);
-      //.reduce((acc, val) => acc + val, 0);
+      const totalSum = Object.values(groups).reduce((acc, val) => acc + val, 0);
       setDura(groups);
 
-      //setSum(totalSum);
+      setSum(totalSum);
       //console.log(parseInt(totalSum[0]));
     });
 
@@ -122,7 +133,7 @@ export default function TodoListPage() {
 
   const handleAddSubject = () => {
     const newSubject = {
-      title: newSubjectTitle,
+      subject_name: newSubjectTitle,
       user_id: user.uid,
     };
 
@@ -148,9 +159,14 @@ export default function TodoListPage() {
       spacing={4}
       py={"5"}
     >
+      <Box>
+        <Text fontSize={"5xl"} as={"b"}>
+          Total StudyTime : {formatTime(sum)}
+        </Text>
+      </Box>
       <Box
         my={"5"}
-        bg={"gray.200"}
+        bg={"blue.50"}
         padding={"20"}
         overflow={"hidden"}
         rounded={"xl"}
@@ -168,7 +184,7 @@ export default function TodoListPage() {
           <Box>
             <IconButton
               mb="1"
-              colorScheme="green"
+              colorScheme="blue"
               icon={<MdAddCircle />}
               onClick={() => setIsModalOpen(true)}
             >
@@ -181,7 +197,7 @@ export default function TodoListPage() {
           {subjects.map((subject) => (
             <ListItem key={subject.id} width={64}>
               <Box
-                bg={"green.300"}
+                bg={"blue.300"}
                 overflow={"hidden"}
                 rounded={"xl"}
                 shadow={"lg"}
@@ -189,22 +205,26 @@ export default function TodoListPage() {
                 <HStack justifyContent={"space-between"} py={"5"} px={"5"}>
                   <Text
                     as={"b"}
-                    onClick={() => onClickList(subject.id, subject.title)}
+                    fontSize={"xl"}
+                    onClick={() =>
+                      onClickList(subject.id, subject.subject_name)
+                    }
                   >
-                    {subject.title}
+                    {subject.subject_name}
                   </Text>
-                  <Text>{dura && dura[subject.id]}</Text>
+                  <Text as={"b"}>{dura && formatTime(dura[subject.id])}</Text>
 
                   <IconButton
                     colorScheme="red"
-                    size="lg"
+                    size="md"
                     ml={2}
                     onClick={() => handleDeleteSubject(subject.id)}
                     icon={<MdDelete />}
                   />
                 </HStack>
-
-                <TodoSubList subjectId={subject.id} />
+                <Box>
+                  <TodoSubList subjectId={subject.id} />
+                </Box>
               </Box>
             </ListItem>
           ))}
@@ -223,7 +243,7 @@ export default function TodoListPage() {
             />
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="green" mr={3} onClick={handleAddSubject}>
+            <Button colorScheme="blue" mr={3} onClick={handleAddSubject}>
               Add
             </Button>
             <Button onClick={() => setIsModalOpen(false)}>Cancel</Button>
@@ -280,7 +300,13 @@ const TodoSubList = ({ subjectId }) => {
   };
 
   return (
-    <VStack spacing={2}>
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="flex-start"
+      spacing={2}
+      padding={"5"}
+    >
       {todos.map((todo) => (
         <TodoItem
           key={todo.id}
@@ -295,14 +321,14 @@ const TodoSubList = ({ subjectId }) => {
           placeholder="Todo title"
         />
         <IconButton
-          colorScheme="green"
+          colorScheme="blue"
           icon={<MdAddCircle />}
           onClick={handleAddTodo}
         >
           Add Todo
         </IconButton>
       </HStack>
-    </VStack>
+    </Box>
   );
 };
 
@@ -325,20 +351,24 @@ const TodoItem = ({ todo, handleDeleteTodo }) => {
   };
 
   return (
-    <HStack>
-      <Checkbox
-        size="lg"
-        defaultChecked={todo.completed}
-        onChange={handleToggleComplete}
-      />
-      <Text>{todo.title}</Text>
-      <IconButton
-        colorScheme="red"
-        size="lg"
-        ml={2}
-        onClick={handleDelete}
-        icon={<MdDelete />}
-      />
-    </HStack>
+    <VStack alignItems="flex-start" mb={"3"}>
+      <HStack>
+        <Checkbox
+          size="lg"
+          defaultChecked={todo.completed}
+          onChange={handleToggleComplete}
+        />
+        <Text>{todo.title}</Text>
+        <Box>
+          <IconButton
+            colorScheme="red"
+            size="xs"
+            ml={2}
+            onClick={handleDelete}
+            icon={<MdDelete />}
+          />
+        </Box>
+      </HStack>
+    </VStack>
   );
 };
