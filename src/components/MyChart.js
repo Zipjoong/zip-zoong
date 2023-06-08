@@ -1,9 +1,25 @@
 //react & chakra-ui
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Box, Button, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Text,
+  Stack,
+  Container,
+  SimpleGrid,
+  Image,
+  Flex,
+  Heading,
+  StackDivider,
+  Icon,
+  useColorModeValue,
+  VStack,
+  HStack,
+  Center,
+} from "@chakra-ui/react";
 //chart library
-import { ResponsivePie } from "@nivo/pie";
+import { ResponsivePie, ResponsivePieCanvas } from "@nivo/pie";
 // to do: chart library import
 import { getAuth } from "firebase/auth";
 
@@ -133,8 +149,14 @@ function MyChart() {
 
   return (
     <Box>
+      <Center>
+        <Text fontSize={"2xl"} pt={5}>
+          하루 동안 공부한 과목들의 누적 시간들을 살펴보세요!
+        </Text>
+      </Center>
       <Box height={500}>
         <ResponsivePie
+          height={500}
           layers={[
             "arcLinkLabels",
             "arcs",
@@ -191,6 +213,45 @@ function MyChart() {
           legends={[]}
         />
       </Box>
+      {/* <Box height={500}>
+        <ResponsivePieCanvas
+          data={studyRecordsState}
+          margin={{ top: 40, right: 200, bottom: 40, left: 80 }}
+          innerRadius={0.5}
+          padAngle={0.7}
+          cornerRadius={3}
+          activeOuterRadiusOffset={8}
+          colors={{ scheme: "paired" }}
+          borderColor={{
+            from: "color",
+            modifiers: [["darker", 0.6]],
+          }}
+          arcLinkLabelsSkipAngle={10}
+          arcLinkLabelsTextColor="#333333"
+          arcLinkLabelsThickness={2}
+          arcLinkLabelsColor={{ from: "color" }}
+          arcLabelsSkipAngle={10}
+          arcLabelsTextColor="#333333"
+          legends={[
+            {
+              anchor: "right",
+              direction: "column",
+              justify: false,
+              translateX: 140,
+              translateY: 0,
+              itemsSpacing: 2,
+              itemWidth: 60,
+              itemHeight: 14,
+              itemTextColor: "#999",
+              itemDirection: "left-to-right",
+              itemOpacity: 1,
+              symbolSize: 14,
+              symbolShape: "circle",
+            },
+          ]}
+        />
+      </Box> */}
+
       <Box>
         <Button onClick={goBackToCalendar}>캘린더로 돌아가기</Button>
       </Box>
