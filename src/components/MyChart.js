@@ -16,6 +16,7 @@ import {
   useColorModeValue,
   VStack,
   HStack,
+  Center,
 } from "@chakra-ui/react";
 //chart library
 import { ResponsivePie, ResponsivePieCanvas } from "@nivo/pie";
@@ -147,12 +148,12 @@ function MyChart() {
   }, []);
 
   return (
-    <VStack>
-      <Box>
-        <Text fontSize={"6xl"}>
+    <Box>
+      <Center>
+        <Text fontSize={"2xl"} pt={5}>
           하루 동안 공부한 과목들의 누적 시간들을 살펴보세요!
         </Text>
-      </Box>
+      </Center>
       <Box height={500}>
         <ResponsivePie
           height={500}
@@ -212,7 +213,7 @@ function MyChart() {
           legends={[]}
         />
       </Box>
-      <Box height={500}>
+      {/* <Box height={500}>
         <ResponsivePieCanvas
           data={studyRecordsState}
           margin={{ top: 40, right: 200, bottom: 40, left: 80 }}
@@ -249,12 +250,12 @@ function MyChart() {
             },
           ]}
         />
-      </Box>
+      </Box> */}
 
       <Box>
         <Button onClick={goBackToCalendar}>캘린더로 돌아가기</Button>
       </Box>
-    </VStack>
+    </Box>
   );
 }
 
