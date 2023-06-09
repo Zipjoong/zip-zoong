@@ -201,7 +201,7 @@ function NewHoli({ subjecttitle, docid }) {
 
       console.log("average2", average2);
       console.log("현재 얼굴 가로 길이:", nowFaceLength);
-      turtleThreshold = calculateA(average, 2.5 * pixelPerCenti);
+      var turtleThreshold = calculateA(average, 2.5 * pixelPerCenti);
       if (v < turtleThreshold && average2 * 1.1 <= nowFaceLength) {
         if (!toast.isActive("turtle-toast"))
           toast({
