@@ -101,6 +101,10 @@ function NewHoli({ subjecttitle, docid }) {
     }
   }
 
+  function calculateA(b, c) {
+    return Math.sqrt(Math.pow(b, 2) - Math.pow(c, 2));
+  }
+
   function onResultsHolistic(results) {
     if (!webcamRef.current) return;
     const videoWidth = webcamRef.current.video.videoWidth;
@@ -114,6 +118,8 @@ function NewHoli({ subjecttitle, docid }) {
     // 거북이 시작
 
     var nowFaceLength;
+    var distanceBetweenEyes;
+    var pixelPerCenti;
     if (results.faceLandmarks) {
       nowFaceLength = calculateDistance(
         results.faceLandmarks[33].x * videoWidth,
@@ -121,6 +127,16 @@ function NewHoli({ subjecttitle, docid }) {
         results.faceLandmarks[263].x * videoWidth,
         results.faceLandmarks[263].y * videoHeight
       );
+    }
+
+    if (results.faceLandmarks) {
+      distanceBetweenEyes = calculateDistance(
+        results.faceLandmarks[133].x * videoWidth,
+        results.faceLandmarks[133].y * videoHeight,
+        results.faceLandmarks[362].x * videoWidth,
+        results.faceLandmarks[362].y * videoHeight
+      );
+      pixelPerCenti = distanceBetweenEyes / 3.4;
     }
 
     if (isSetted == false) {
@@ -185,7 +201,8 @@ function NewHoli({ subjecttitle, docid }) {
 
       console.log("average2", average2);
       console.log("현재 얼굴 가로 길이:", nowFaceLength);
-      if (v < average * 0.93 && average2 * 1.1 <= nowFaceLength) {
+      turtleThreshold = calculateA(average, 2.5 * pixelPerCenti);
+      if (v < turtleThreshold && average2 * 1.1 <= nowFaceLength) {
         if (!toast.isActive("turtle-toast"))
           toast({
             id: "turtle-toast",
