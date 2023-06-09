@@ -330,7 +330,7 @@ function NewHoli({ subjecttitle, docid }) {
             colorScheme="blue"
             variant="solid"
           >
-            Go Back to Todo List Page
+            리스트로 돌아가기
           </Button>
         </Link>
       </Box>

@@ -26,6 +26,21 @@ import { getAuth } from "firebase/auth";
 //firebase
 import { getStudyRecordsOfUserXIncludeSubjectName } from "./Firebase";
 
+function formatTime(time) {
+  if (!time) {
+    return `00:00:00`;
+  } else {
+    const hours = Math.floor(time / 3600)
+      .toString()
+      .padStart(2, "0");
+    const minutes = Math.floor((time % 3600) / 60)
+      .toString()
+      .padStart(2, "0");
+    const seconds = (time % 60).toString().padStart(2, "0");
+    return `${hours}:${minutes}:${seconds}`;
+  }
+}
+
 function remainOnlyDate(start_date_time) {
   start_date_time.setHours(0, 0, 0, 0);
   start_date_time = new Date(start_date_time);
@@ -140,7 +155,15 @@ function MyChart() {
         studyRecordsListFromFirebase
       );
       await console.log("piechartList", piechartList);
+      for (var i = 0; i < piechartList.length; i++) {
+        piechartList[i].id += "  " + formatTime(piechartList[i].value);
+      }
+
       setStudyRecordsState(piechartList);
+      // console.log(
+      //   "&&&&&&&&&&&&&&&&&&",
+      //   formatTime(piechartList[0].value.toString())
+      // );
 
       await console.log("-------- useEffect end :(");
     };
@@ -171,19 +194,19 @@ function MyChart() {
               return (
                 <g transform={`translate(${centerX},${centerY})`}>
                   <text
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    style={{ fontSize: "24px", fontWeight: "bold" }}
-                  >
-                    {totalValue}
-                  </text>
-                  <text
                     y={24}
                     textAnchor="middle"
                     dominantBaseline="middle"
                     style={{ fontSize: "16px" }}
                   >
                     Total
+                  </text>
+                  <text
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                    style={{ fontSize: "24px", fontWeight: "bold" }}
+                  >
+                    {formatTime(totalValue)}
                   </text>
                 </g>
               );
@@ -202,6 +225,7 @@ function MyChart() {
             from: "color",
             modifiers: [["darker", "0.2"]],
           }}
+          enableArcLabels={false}
           arcLinkLabelsSkipAngle={12}
           arcLinkLabelsTextColor="#333333"
           arcLinkLabelsThickness={2}
@@ -251,10 +275,13 @@ function MyChart() {
           ]}
         />
       </Box> */}
-
-      <Box>
-        <Button onClick={goBackToCalendar}>캘린더로 돌아가기</Button>
-      </Box>
+      <Center>
+        <Box mb={"8"}>
+          <Button onClick={goBackToCalendar} colorScheme="blue">
+            캘린더로 돌아가기
+          </Button>
+        </Box>
+      </Center>
     </Box>
   );
 }

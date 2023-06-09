@@ -1,3 +1,4 @@
+import { Box } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 
@@ -148,7 +149,7 @@ function CamStudy() {
   };
 
   return (
-    <div>
+    <Box>
       {/* <title>Noom</title> */}
       <link rel="stylesheet" href="https://unpkg.com/mvp.css" />
       {/* <header>
@@ -198,7 +199,7 @@ function CamStudy() {
           </div>
         )}
       </main>
-    </div>
+    </Box>
   );
 }
 
