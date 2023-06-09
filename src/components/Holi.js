@@ -143,14 +143,11 @@ function NewHoli({ subjecttitle, docid }) {
       if (!toast.isActive("camera-in-setting-toast"))
         toast({
           id: "camera-in-setting-toast",
+          title: "카메라 세팅중",
+          status: "info",
           isClosable: true,
           position: "top-left",
           duration: 1000,
-          render: () => (
-            <Box color="white" p={3} bg="blue.500">
-              카메라 세팅중
-            </Box>
-          ),
         });
       const v = turtleDetection(results, {
         width: videoWidth,
