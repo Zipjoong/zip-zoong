@@ -1,13 +1,22 @@
-import { Card, CardHeader, CardBody, CardFooter } from "@chakra-ui/react";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  HStack,
+  Flex,
+} from "@chakra-ui/react";
 import { Box, Grid, Heading, Text, Button, Center } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
 export default function Landing() {
   return (
     // <Center>
-    <Box>
-      <Grid py={30} px={40} columnGap={10} templateColumns={"repeat(3,1fr)"}>
+    <Flex justify="space-between" alignItems="center" px={30} py={20}>
+      {/* <Grid py={30} px={40} columnGap={10} templateColumns={"repeat(3,1fr)"}> */}
+      <Box w="33%" p={4}>
         <Card
+          height={"400"}
           align="center"
           variant={"filled"}
           padding={10}
@@ -15,14 +24,14 @@ export default function Landing() {
           bg={"gray.200"}
         >
           <CardHeader>
-            <Heading size="lg"> 공부시간 측정 </Heading>
+            <Heading size="lg"> 시간 측정 </Heading>
           </CardHeader>
           <CardBody>
             <Text>
-              FaceMesh를 사용하여 보다 정확한 집중시간을 측정해보세요!
-              <br />
-              자리비움과 눈을감을 경우 시간 카운팅을 멈추고, 거북목 자세가
-              발생할 경우 소리와 문구로 알려드려요.
+              {/* FaceMesh를 사용하여 보다 정확한 집중시간을 측정해보세요!
+              <br /> */}
+              자리비움과 눈을감을 경우 시간을 멈추고, 거북목이 발생할 경우
+              소리와 문구로 알려드려요.
             </Text>
           </CardBody>
           <CardFooter>
@@ -33,7 +42,10 @@ export default function Landing() {
             </Link>
           </CardFooter>
         </Card>
+      </Box>
+      <Box w="33%" p={4}>
         <Card
+          height={"400"}
           align="center"
           variant={"filled"}
           padding={10}
@@ -57,7 +69,10 @@ export default function Landing() {
             </Link>
           </CardFooter>
         </Card>
+      </Box>
+      <Box w="33%" p={4}>
         <Card
+          height={"400"}
           align="center"
           variant={"filled"}
           padding={10}
@@ -80,8 +95,9 @@ export default function Landing() {
             </Link>
           </CardFooter>
         </Card>
-      </Grid>
-    </Box>
+      </Box>
+      {/* </Grid> */}
+    </Flex>
 
     // </Center>
   );

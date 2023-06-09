@@ -29,6 +29,8 @@ import {
 import { getAuth, signOut } from "firebase/auth";
 import Footer from "./Footer";
 
+import NewHoli from "./Holi";
+
 //import CallToActionWithAnnotation from "./Main";
 
 export default function Test() {

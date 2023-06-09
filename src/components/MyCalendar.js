@@ -12,6 +12,21 @@ import { getAuth } from "@firebase/auth";
 
 const palette = ["rgba(0,0,255,2)", "rgba(0,0,255,1)", "rgba(0,0,255,0.2)"];
 
+function formatTime(time) {
+  if (!time) {
+    return `00:00:00`;
+  } else {
+    const hours = Math.floor(time / 3600)
+      .toString()
+      .padStart(2, "0");
+    const minutes = Math.floor((time % 3600) / 60)
+      .toString()
+      .padStart(2, "0");
+    const seconds = (time % 60).toString().padStart(2, "0");
+    return `${hours}:${minutes}:${seconds}`;
+  }
+}
+
 function convertFirebaseDataToCalendarData(studyRecordsForEachSubject) {
   const calEvents = [];
   for (var i = 0; i < studyRecordsForEachSubject.length; i++) {
@@ -22,17 +37,21 @@ function convertFirebaseDataToCalendarData(studyRecordsForEachSubject) {
     const studyDuration = studyRecordsForEachSubject[i].real_study_time;
     // const seletedColor =
     //   palette[studyRecordsForEachSubject[i].subject_id % palette.length];
+    console.log(studyDuration, "STUDY");
     const colorPower = studyDuration / 60;
     const seletedColor = "rgba(0,0,255," + colorPower + ")";
     calEvents.push({
       title:
         studyRecordsForEachSubject[i].subject_name +
-        " " +
-        Math.floor(studyDuration / 3600) +
-        ":" +
-        Math.floor(studyDuration / 60) +
-        ":" +
-        (studyDuration % 60),
+        "  " +
+        formatTime(studyDuration),
+      // studyRecordsForEachSubject[i].subject_name +
+      // " " +
+      // Math.floor(studyDuration / 3600) +
+      // ":" +
+      // Math.floor(studyDuration / 60) +
+      // ":" +
+      // (studyDuration % 60),
       start: new Date(studyRecordsForEachSubject[i].start_time.seconds * 1000),
       end: new Date(studyRecordsForEachSubject[i].end_time.seconds * 1000),
       color: seletedColor,
